@@ -1,3 +1,62 @@
+:root {
+  /* Color Palette */
+  --color-primary: #38bdf8;
+  --color-primary-light: #7dd3fc;
+  --color-primary-dark: #0ea5e9;
+  --color-secondary: #38a5a5;
+  --color-accent: #63B3ED;
+  
+  /* Background Colors */
+  --color-bg-dark: #1a202cce;
+  --color-bg-light: #234e5291;
+  --color-bg-medium: #ccd0d494;
+  
+  /* Text Colors */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.7);
+  
+  /* Glass Effect */
+  --glass-bg: rgba(22, 32, 51, 0.3);
+  --glass-bg-hover: rgba(16, 24, 39, 0.4);
+  --glass-border: rgba(56, 189, 248, 0.2);
+  --glass-border-hover: rgba(56, 189, 248, 0.3);
+  
+  /* Shadows */
+  --shadow-primary: rgba(56, 189, 248, 0.1);
+  --shadow-secondary: rgba(56, 189, 248, 0.06);
+  --shadow-glow: rgba(56, 189, 248, 0.05);
+  
+  /* Animation Timings */
+  --animation-slow: 8s;
+  --animation-medium: 6s;
+  --animation-fast: 3s;
+  
+  /* Blur Effects */
+  --blur-amount: 8px;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    to right,
+    var(--color-primary),
+    var(--color-primary-dark)
+  );
+  
+  --gradient-wave: linear-gradient(
+    45deg,
+    var(--color-secondary),
+    var(--color-accent),
+    var(--color-secondary),
+    var(--color-accent)
+  );
+  
+  --gradient-ocean: linear-gradient(
+    to bottom,
+    var(--color-bg-dark),
+    var(--color-bg-light),
+    var(--color-bg-medium)
+  );
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -149,18 +208,12 @@ html {
 
 /* Wave text effect */
 .wave-text {
-  background: linear-gradient(
-    45deg,
-    #4FD1C5,
-    #63B3ED,
-    #4FD1C5,
-    #63B3ED
-  );
+  background: var(--gradient-wave);
   background-size: 300%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: wave-animation 8s ease-in-out infinite;
+  animation: wave-animation var(--animation-slow) ease-in-out infinite;
 }
 
 @keyframes wave-animation {
@@ -209,12 +262,7 @@ html {
 
 /* Ocean theme colors */
 .bg-ocean {
-  background: linear-gradient(
-    to bottom,
-    #1a202c,
-    #234e52,
-    #2c5282
-  );
+  background: var(--gradient-ocean);
 }
 
 .bg-ocean-surface {
@@ -227,8 +275,125 @@ html {
 
 /* Glass effect with ocean tint */
 .glass-ocean {
-  @apply backdrop-blur-md;
-  background: rgba(44, 82, 130, 0.1);
-  border: 1px solid rgba(79, 209, 197, 0.2);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amount));
+  -webkit-backdrop-filter: blur(var(--blur-amount));
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 4px 6px -1px var(--shadow-primary),
+    0 2px 4px -1px var(--shadow-secondary),
+    inset 0 0 20px var(--shadow-glow);
+}
+
+.glass-ocean:hover {
+  background: var(--glass-bg-hover);
+  border: 1px solid var(--glass-border-hover);
+}
+
+/* Wave animation */
+@keyframes wave {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+}
+
+/* Add this to your existing styles */
+@keyframes wave {
+  0% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0.8;
+  }
+}
+
+/* Add these z-index utilities */
+.z-0 {
+  z-index: 0;
+}
+
+.z-1 {
+  z-index: 1;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+/* Ensure proper stacking context */
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+/* Background image styles */
+.bg-fixed {
+  background-attachment: fixed;
+}
+
+/* Add these new styles */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Enhanced glass effect */
+.glass-ocean {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-amount));
+  -webkit-backdrop-filter: blur(var(--blur-amount));
+  border: 1px solid var(--glass-border);
+  box-shadow: 
+    0 4px 6px -1px var(--shadow-primary),
+    0 2px 4px -1px var(--shadow-secondary),
+    inset 0 0 20px var(--shadow-glow);
+}
+
+.glass-ocean:hover {
+  background: var(--glass-bg-hover);
+  border: 1px solid var(--glass-border-hover);
+}
+
+/* Add blue glow effect */
+.blue-glow {
+  text-shadow: 0 0 10px rgba(110, 216, 255, 0.5);
+}
+
+/* Blue gradient text */
+.blue-gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

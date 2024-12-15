@@ -7,42 +7,64 @@ import Contact from './components/sections/Contact';
 import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
 import LoadingScreen from './components/common/LoadingScreen';
-import { AnimatePresence } from 'framer-motion';
-
 import Skills from './components/sections/Skills';
 import WaveBackground from './components/common/WaveBackground';
+import BackgroundOverlay from './components/common/BackgroundOverlay';
+import { AnimatePresence, motion } from 'framer-motion';
+
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Simulate loading time
-    const timer = setTimeout(() => {
+  const handleLoadingComplete = () => {
+    // Add a delay before hiding the loading screen
+    setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, 500); // 8 seconds total loading time
+  };
 
-    return () => clearTimeout(timer);
+  // Optional: Force minimum loading time
+  useEffect(() => {
+    const minLoadingTime = setTimeout(() => {
+      // This ensures the loading screen shows for at least X seconds
+      // even if everything loads quickly
+    }, 3000);
+
+    return () => clearTimeout(minLoadingTime);
   }, []);
 
   return (
     <>
-      
-      <AnimatePresence>
-        {isLoading && <LoadingScreen />}
-      </AnimatePresence>
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <LoadingScreen onLoadingComplete={handleLoadingComplete} />
+        ) : (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="relative min-h-screen"
+          >
+            {/* Background layers */}
+            <BackgroundOverlay />
+            <WaveBackground />
 
-      <div className="relative min-h-screen">
-      <WaveBackground />
-      <div className="relative z-10">
-        <Navbar />
-        <Hero />
-        <About />
-        <Projects />
-        <Skills />
-        <Contact />
-        <Footer />
-        <ScrollToTop />
-      </div>
-      </div>
+            {/* Main content */}
+            <div className="relative z-10">
+              <Navbar />
+              <main>
+                <Hero />
+                <About />
+                <Projects />
+                <Skills />
+                <Contact />
+                <Footer />
+              </main>
+              <ScrollToTop />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
