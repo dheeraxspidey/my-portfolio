@@ -47,7 +47,8 @@
 
 /* Glass Effect */
 .glass {
-  @apply bg-white/10 backdrop-blur-md;
+  @apply bg-white/10 backdrop-blur-lg;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Animations */
@@ -68,6 +69,12 @@
 body {
   @apply bg-gray-900 text-white cursor-none;
   font-family: 'Inter', sans-serif;
+  cursor: default;
+}
+
+/* Make sure links show pointer cursor */
+a, button {
+  cursor: pointer !important;
 }
 
 /* Typography */
@@ -101,4 +108,127 @@ h1, h2, h3, h4, h5, h6 {
 /* Container styles */
 .container {
   @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Custom styles */
+body {
+  @apply bg-gray-900 text-white;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Gradient animations */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600;
+  background-size: 200% 200%;
+  animation: gradient 8s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-500 rounded-full;
+}
+
+/* Wave text effect */
+.wave-text {
+  background: linear-gradient(
+    45deg,
+    #4FD1C5,
+    #63B3ED,
+    #4FD1C5,
+    #63B3ED
+  );
+  background-size: 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: wave-animation 8s ease-in-out infinite;
+}
+
+@keyframes wave-animation {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Floating animation */
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Ripple effect */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(79, 209, 197, 0.2) 0%, transparent 70%);
+  transform: scale(0);
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+.ripple:hover::after {
+  transform: scale(2);
+  opacity: 1;
+}
+
+/* Ocean theme colors */
+.bg-ocean {
+  background: linear-gradient(
+    to bottom,
+    #1a202c,
+    #234e52,
+    #2c5282
+  );
+}
+
+.bg-ocean-surface {
+  background: linear-gradient(
+    to bottom,
+    rgba(79, 209, 197, 0.1),
+    rgba(99, 179, 237, 0.1)
+  );
+}
+
+/* Glass effect with ocean tint */
+.glass-ocean {
+  @apply backdrop-blur-md;
+  background: rgba(44, 82, 130, 0.1);
+  border: 1px solid rgba(79, 209, 197, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
 }

@@ -8,8 +8,9 @@ import Footer from './components/layout/Footer';
 import ScrollToTop from './components/common/ScrollToTop';
 import LoadingScreen from './components/common/LoadingScreen';
 import { AnimatePresence } from 'framer-motion';
-import CustomCursor from './components/common/CustomCursor';
 
+import Skills from './components/sections/Skills';
+import WaveBackground from './components/common/WaveBackground';
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -24,19 +25,23 @@ function App() {
 
   return (
     <>
-      <CustomCursor />
+      
       <AnimatePresence>
         {isLoading && <LoadingScreen />}
       </AnimatePresence>
 
-      <div className="min-h-screen bg-gray-900">
+      <div className="relative min-h-screen">
+      <WaveBackground />
+      <div className="relative z-10">
         <Navbar />
         <Hero />
-        <Projects />
         <About />
+        <Projects />
+        <Skills />
         <Contact />
         <Footer />
         <ScrollToTop />
+      </div>
       </div>
     </>
   );
