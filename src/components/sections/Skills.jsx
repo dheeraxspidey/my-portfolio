@@ -1,42 +1,62 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { FaCode, FaTools, FaBrain, FaTrophy, FaCertificate } from 'react-icons/fa';
 
 function Skills() {
-  const skillCategories = [
-    {
+  const [activeTab, setActiveTab] = useState('skills');
+  const [hoveredSkill, setHoveredSkill] = useState(null);
+
+  const skillCategories = {
+    programming: {
       title: "Programming Languages",
-      skills: [
-        { name: "Python", level: 90 },
-        { name: "C", level: 85 },
-        { name: "R", level: 80 },
-        { name: "JavaScript", level: 75 },
-        { name: "HTML/CSS", level: 85 }
+      icon: <FaCode className="text-2xl" />,
+      items: [
+        { name: "Python", specialty: ["ML", "Data Analysis", "Automation"] },
+        { name: "C", specialty: ["System Programming", "Algorithms"] },
+        { name: "R", specialty: ["Statistical Analysis", "Data Visualization"] },
+        { name: "JavaScript", specialty: ["Web Development", "Frontend"] },
+        { name: "HTML/CSS", specialty: ["Responsive Design", "UI/UX"] }
       ]
     },
-    {
+    tools: {
       title: "Tools & Technologies",
-      skills: [
-        { name: "Tableau", level: 85 },
-        { name: "Power BI", level: 80 },
-        { name: "Flask", level: 85 },
-        { name: "SQL", level: 80 },
-        { name: "Git", level: 75 }
+      icon: <FaTools className="text-2xl" />,
+      items: [
+        { name: "Tableau", specialty: ["Data Visualization", "Dashboards"] },
+        { name: "Power BI", specialty: ["Business Analytics", "Reporting"] },
+        { name: "Flask", specialty: ["API Development", "Web Services"] },
+        { name: "SQL", specialty: ["Database Design", "Query Optimization"] },
+        { name: "Git", specialty: ["Version Control", "Collaboration"] }
       ]
     },
-    {
+    domains: {
       title: "Domains",
-      skills: [
-        { name: "Machine Learning", level: 90 },
-        { name: "Web Development", level: 85 },
-        { name: "Data Analytics", level: 85 },
-        { name: "AI", level: 80 }
+      icon: <FaBrain className="text-2xl" />,
+      items: [
+        { name: "Machine Learning", specialty: ["Neural Networks", "Deep Learning"] },
+        { name: "Web Development", specialty: ["Full Stack", "RESTful APIs"] },
+        { name: "Data Analytics", specialty: ["Statistical Analysis", "Visualization"] },
+        { name: "AI", specialty: ["NLP", "Computer Vision"] }
       ]
     }
+  };
+
+  const certifications = [
+    "Machine Learning Specialization – Coursera",
+    "Infosys Springboard AI Primer",
+    "Infosys Springboard Gen AI",
+    "Google Cloud Data Analytics"
+  ];
+
+  const competitive = [
+    { platform: "Smart Interviews", achievement: "Diamond Certified", rank: "Rank 1247/37015" },
+    { platform: "LeetCode", achievement: "Rating: 1605", rank: "Top 10%" },
+    { platform: "CodeChef", achievement: "2 Stars", rank: "Active Participant" }
   ];
 
   return (
     <section id="skills" className="py-20 relative overflow-hidden">
-      {/* Animated wave background */}
+      {/* Background effects */}
       <div className="absolute inset-0 z-0">
         {[...Array(3)].map((_, i) => (
           <motion.div
@@ -62,6 +82,7 @@ function Skills() {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
+        {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -70,132 +91,152 @@ function Skills() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="wave-text">Technical Skills</span>
+            <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
+              Technical Skills
+            </span>
           </h2>
-          <p className="text-primary-400 max-w-xl mx-auto">
-            Expertise in various programming languages, tools, and technologies
-          </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {skillCategories.map((category, categoryIndex) => (
-            <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: categoryIndex * 0.2 }}
-              viewport={{ once: true }}
-              className="glass-ocean rounded-xl p-6 hover:shadow-2xl transition-all duration-300"
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap justify-center mb-12 gap-4 px-4">
+          {['skills', 'certifications', 'competitive'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`px-4 py-2 rounded-full text-sm uppercase tracking-wider
+                        backdrop-blur-sm transition-all duration-300 ${
+                          activeTab === tab 
+                          ? 'bg-primary-500/20 text-primary-400 border border-primary-500/50' 
+                          : 'text-gray-400 hover:text-white border border-gray-700 hover:border-primary-500/30'
+                        }`}
             >
-              <h3 className="text-xl font-bold text-primary-400 mb-6">
-                {category.title}
-              </h3>
-              <div className="space-y-4">
-                {category.skills.map((skill, skillIndex) => (
-                  <div key={skill.name}>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-gray-300">{skill.name}</span>
-                      <span className="text-primary-400">{skill.level}%</span>
-                    </div>
-                    <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        whileInView={{ width: `${skill.level}%` }}
-                        transition={{ duration: 1, delay: skillIndex * 0.1 }}
-                        viewport={{ once: true }}
-                        className="h-full rounded-full bg-gradient-to-r from-primary-500 to-secondary-500"
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+              {tab}
+            </button>
           ))}
         </div>
 
-        {/* Certifications */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="mt-16"
-        >
-          <h3 className="text-2xl font-bold text-primary-400 mb-6 text-center">Certifications</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              "Machine Learning Specialization – Coursera",
-              "Infosys Springboard AI Primer",
-              "Infosys Springboard Gen AI",
-              "Google Cloud Data Analytics"
-            ].map((cert, index) => (
-              <motion.div
-                key={cert}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="glass-ocean p-4 rounded-lg text-center hover:shadow-lg transition-all duration-300"
-                whileHover={{ y: -5 }}
-              >
-                <p className="text-gray-300">{cert}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        {/* Content Container */}
+        <div className="backdrop-blur-sm bg-gray-900/50 rounded-xl p-4 md:p-8 border border-gray-700/50">
+          {/* Skills Grid */}
+          {activeTab === 'skills' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Object.entries(skillCategories).map(([key, category]) => (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-gray-800/30 backdrop-blur-sm rounded-lg p-6
+                            border border-gray-700/50 hover:border-primary-500/30
+                            transition-all duration-300"
+                >
+                  <div className="flex items-center mb-6 space-x-3">
+                    <div className="text-primary-400">{category.icon}</div>
+                    <h3 className="text-lg text-gray-200">{category.title}</h3>
+                  </div>
+                  <div className="space-y-4">
+                    {category.items.map((item) => (
+                      <div key={item.name} className="relative">
+                        <motion.div
+                          className={`transition-all duration-300 ${
+                            hoveredSkill === item.name ? 'mb-20' : 'mb-2'
+                          }`}
+                          onHoverStart={() => setHoveredSkill(item.name)}
+                          onHoverEnd={() => setHoveredSkill(null)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-gray-300">{item.name}</span>
+                          </div>
+                          <div className="h-1 bg-gray-700/30 rounded-full overflow-hidden mt-2">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: '100%' }}
+                              transition={{ duration: 1 }}
+                              className="h-full bg-gradient-to-r from-primary-500/40 to-secondary-500/40 rounded-full"
+                            />
+                          </div>
 
-        {/* Competitive Programming */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="mt-16 text-center"
-        >
-          <h3 className="text-2xl font-bold text-primary-400 mb-6">Competitive Programming</h3>
-          <div className="flex flex-wrap justify-center gap-6">
-            {[
-              { title: "Smart Interviews", desc: "Diamond Certified, Rank 1247/37015" },
-              { title: "LeetCode", desc: "Rating: 1605" },
-              { title: "CodeChef", desc: "2 Stars" }
-            ].map((platform, index) => (
-              <motion.div
-                key={platform.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="glass-ocean p-4 rounded-lg hover:shadow-lg transition-all duration-300"
-                whileHover={{ y: -5 }}
-              >
-                <p className="text-primary-400 font-bold">{platform.title}</p>
-                <p className="text-gray-300">{platform.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+                          {/* Expandable details */}
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{
+                              opacity: hoveredSkill === item.name ? 1 : 0,
+                              height: hoveredSkill === item.name ? 'auto' : 0,
+                            }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute left-0 right-0 mt-2 overflow-hidden"
+                          >
+                            <div className="bg-gray-800/90 rounded-lg p-3 border border-gray-700/50">
+                              <div className="flex flex-wrap gap-2">
+                                {item.specialty.map((spec) => (
+                                  <span
+                                    key={spec}
+                                    className="px-2 py-1 text-xs rounded-full
+                                             bg-primary-500/10 text-primary-400 
+                                             border border-primary-500/20"
+                                  >
+                                    {spec}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          </motion.div>
+                        </motion.div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
 
-        {/* Floating particles */}
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={`particle-${i}`}
-            className="absolute w-1 h-1 rounded-full bg-primary-400/40"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.2, 0.5, 0.2],
-            }}
-            transition={{
-              duration: 5 + Math.random() * 5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: Math.random() * 5,
-            }}
-          />
-        ))}
+          {/* Certifications */}
+          {activeTab === 'certifications' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {certifications.map((cert, index) => (
+                <motion.div
+                  key={cert}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-center space-x-4 p-4 bg-gray-800/30 rounded-lg
+                            border border-gray-700/50 hover:border-primary-500/30"
+                >
+                  <FaCertificate className="text-2xl text-primary-400 flex-shrink-0" />
+                  <span className="text-gray-300">{cert}</span>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+
+          {/* Competitive Programming */}
+          {activeTab === 'competitive' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {competitive.map((item, index) => (
+                <motion.div
+                  key={item.platform}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="p-6 bg-gray-800/30 rounded-lg text-center
+                            border border-gray-700/50 hover:border-primary-500/30"
+                >
+                  <FaTrophy className="text-3xl text-primary-400 mx-auto mb-4" />
+                  <h4 className="text-xl text-gray-200 mb-2">{item.platform}</h4>
+                  <p className="text-gray-300">{item.achievement}</p>
+                  <p className="text-sm text-gray-400">{item.rank}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </div>
       </div>
     </section>
   );

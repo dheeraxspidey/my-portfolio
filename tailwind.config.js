@@ -22,6 +22,8 @@ module.exports = {
       animation: {
         'float': 'float 6s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
+        scan: 'scan 2s linear infinite',
+        flicker: 'flicker 0.2s infinite',
       },
       keyframes: {
         float: {
@@ -32,6 +34,18 @@ module.exports = {
           '0%': { boxShadow: '0 0 5px rgb(79 209 197 / 0.5), 0 0 20px rgb(79 209 197 / 0.3)' },
           '100%': { boxShadow: '0 0 10px rgb(79 209 197 / 0.8), 0 0 40px rgb(79 209 197 / 0.5)' },
         },
+        scan: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(100%)' },
+        },
+        flicker: {
+          '0%, 100%': { opacity: 0.1 },
+          '50%': { opacity: 0.2 },
+        },
+      },
+      fontFamily: {
+        future: ['Orbitron', 'sans-serif'],
+        'future-secondary': ['Rajdhani', 'sans-serif'],
       },
     },
   },

@@ -12,7 +12,7 @@ function Hero() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          {/* Main Title with Enhanced Animation */}
+          {/* Main Title with Matrix Style */}
           <div className="relative">
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -22,7 +22,7 @@ function Hero() {
             >
               <TypeAnimation
                 sequence={[
-                  'Hello World!', // Initial greeting
+                  'Hello World!',
                   400,
                   'Hi there!',
                   1000,
@@ -35,39 +35,17 @@ function Hero() {
                 wrapper="h1"
                 cursor={true}
                 repeat={Infinity}
-                style={{
-                  fontSize: '2.5rem',
-                  display: 'inline-block',
-                  fontWeight: 'bold',
-                  background: 'linear-gradient(to right, #ffffff, #88ccff)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
+                className="text-4xl md:text-6xl font-bold relative z-10 
+                          font-mono text-white tracking-wide
+                          [text-shadow:_0_0_2px_#fff]
+                          style-matrix"
                 speed={{ type: 'keyStrokeDelayInMs', value: 100 }}
                 deletionSpeed={75}
-                className="text-4xl md:text-6xl font-bold relative z-10"
-              />
-              
-              {/* Glowing effect behind text */}
-              <motion.div
-                className="absolute inset-0 -z-10 blur-2xl"
-                animate={{
-                  opacity: [0.2, 0.4, 0.2],
-                  scale: [1, 1.1, 1],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                }}
-                style={{
-                  background: 'radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, transparent 70%)',
-                }}
               />
             </motion.div>
           </div>
 
-          {/* Role/Title with Enhanced Animation */}
+          {/* Role/Title with Matrix Style */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -75,7 +53,7 @@ function Hero() {
           >
             <TypeAnimation
               sequence={[
-                3000, // Initial delay
+                3000,
                 'AI/ML Engineer',
                 2000,
                 'Full Stack Developer',
@@ -86,28 +64,23 @@ function Hero() {
               wrapper="p"
               cursor={true}
               repeat={Infinity}
-              style={{
-                fontSize: '1.5rem',
-                background: 'linear-gradient(to right, #38bdf8, #818cf8)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-              className="text-xl md:text-2xl mb-6 max-w-2xl mx-auto"
+              className="text-xl md:text-2xl mb-6 max-w-2xl mx-auto 
+                        font-mono tracking-[0.2em] text-white/90
+                        style-matrix-subtle"
             />
           </motion.div>
 
-          {/* Optional: Add floating particles effect */}
-          <div className="absolute inset-0 pointer-events-none">
-            {[...Array(20)].map((_, i) => (
+          {/* Matrix-style background dots */}
+          <div className="absolute inset-0 pointer-events-none opacity-20">
+            {[...Array(100)].map((_, i) => (
               <motion.div
                 key={i}
-                className="absolute w-1 h-1 bg-blue-400/30 rounded-full"
+                className="absolute w-1 h-1 bg-white rounded-full"
                 style={{
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
                 }}
                 animate={{
-                  y: [0, -30, 0],
                   opacity: [0, 1, 0],
                 }}
                 transition={{
