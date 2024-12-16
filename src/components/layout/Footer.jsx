@@ -1,42 +1,46 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { FaLinkedin, FaGithub, FaEnvelope, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
 
+  const socialLinks = [
+    {
+      name: "LinkedIn",
+      icon: <FaLinkedin className="text-xl" />,
+      url: "https://linkedin.com/in/your-profile"
+    },
+    {
+      name: "GitHub",
+      icon: <FaGithub className="text-xl" />,
+      url: "https://github.com/your-profile"
+    }
+  ];
+
   return (
     <footer className="relative overflow-hidden">
-      {/* Wave Animation */}
-      <div className="absolute inset-0 z-0">
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-32"
-          style={{
-            background: 'linear-gradient(to top, rgba(79, 209, 197, 0.1), transparent)',
-          }}
-          animate={{
-            y: [0, -10, 0],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-      </div>
+      {/* Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-dark opacity-50" />
 
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        <div className="glass-ocean rounded-xl p-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="container mx-auto px-4 py-12 relative z-10">
+        <div className="glass-card p-8 rounded-lg">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             {/* Quick Links */}
             <div>
-              <h3 className="text-primary-400 font-bold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
+              <h3 className="text-xl font-bold text-gradient mb-6">Navigation</h3>
+              <ul className="space-y-3">
                 {['About', 'Projects', 'Skills', 'Contact'].map((item) => (
-                  <motion.li key={item} whileHover={{ x: 5 }}>
+                  <motion.li 
+                    key={item}
+                    whileHover={{ x: 5 }}
+                    className="transition-all duration-300"
+                  >
                     <a
                       href={`#${item.toLowerCase()}`}
-                      className="text-gray-300 hover:text-primary-400 transition-colors"
+                      className="text-gray-300 hover:text-primary transition-colors flex items-center gap-2"
                     >
+                      <span className="text-primary">•</span>
                       {item}
                     </a>
                   </motion.li>
@@ -46,25 +50,28 @@ function Footer() {
 
             {/* Contact Info */}
             <div>
-              <h3 className="text-primary-400 font-bold mb-4">Contact</h3>
-              <ul className="space-y-2">
+              <h3 className="text-xl font-bold text-gradient mb-6">Contact</h3>
+              <ul className="space-y-3">
                 <li>
                   <a
                     href="mailto:adheerajkumar1@gmail.com"
-                    className="text-gray-300 hover:text-primary-400 transition-colors"
+                    className="text-gray-300 hover:text-primary transition-colors flex items-center gap-2"
                   >
+                    <FaEnvelope className="text-primary" />
                     adheerajkumar1@gmail.com
                   </a>
                 </li>
                 <li>
                   <a
                     href="tel:+919390695922"
-                    className="text-gray-300 hover:text-primary-400 transition-colors"
+                    className="text-gray-300 hover:text-primary transition-colors flex items-center gap-2"
                   >
+                    <FaPhone className="text-primary" />
                     +91 9390695922
                   </a>
                 </li>
-                <li className="text-gray-300">
+                <li className="text-gray-300 flex items-center gap-2">
+                  <FaMapMarkerAlt className="text-primary" />
                   Kompally, Hyderabad, India
                 </li>
               </ul>
@@ -72,49 +79,44 @@ function Footer() {
 
             {/* Social Links */}
             <div>
-              <h3 className="text-primary-400 font-bold mb-4">Connect</h3>
-              <div className="flex space-x-4">
-                <motion.a
-                  href="https://linkedin.com/in/your-profile"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className="text-gray-300 hover:text-primary-400 transition-colors"
-                >
-                  LinkedIn
-                </motion.a>
-                <motion.a
-                  href="https://github.com/your-profile"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className="text-gray-300 hover:text-primary-400 transition-colors"
-                >
-                  GitHub
-                </motion.a>
+              <h3 className="text-xl font-bold text-gradient mb-6">Connect</h3>
+              <div className="flex gap-4">
+                {socialLinks.map((link) => (
+                  <motion.a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -5 }}
+                    className="button-icon"
+                    aria-label={link.name}
+                  >
+                    {link.icon}
+                  </motion.a>
+                ))}
               </div>
             </div>
           </div>
 
           {/* Copyright */}
-          <div className="mt-8 pt-8 border-t border-primary-500/20 text-center">
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1 }}
-              className="text-gray-400"
-            >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+            className="pt-8 border-t border-primary/20 text-center"
+          >
+            <p className="text-gray-400">
               © {currentYear} Dheeraj Kumar. All rights reserved.
-            </motion.p>
-          </div>
+            </p>
+          </motion.div>
         </div>
       </div>
 
-      {/* Floating particles */}
-      {[...Array(5)].map((_, i) => (
+      {/* Background Particles */}
+      {[...Array(10)].map((_, i) => (
         <motion.div
           key={`particle-${i}`}
-          className="absolute w-1 h-1 rounded-full bg-primary-400/40"
+          className="absolute w-1 h-1 rounded-full bg-primary/40"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,

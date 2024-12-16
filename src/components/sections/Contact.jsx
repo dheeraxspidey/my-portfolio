@@ -10,36 +10,13 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your form submission logic here
     console.log(formData);
   };
 
   return (
     <section id="contact" className="py-20 relative overflow-hidden">
-      {/* Animated wave background */}
-      <div className="absolute inset-0 z-0">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-full"
-            style={{
-              height: `${300 + i * 50}px`,
-              background: `linear-gradient(to bottom, transparent, rgba(79, 209, 197, ${0.03 + i * 0.01}))`,
-              filter: 'blur(4px)',
-              bottom: `-${i * 20}px`,
-            }}
-            animate={{
-              y: ['0%', '5%', '0%'],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: i * 0.5,
-            }}
-          />
-        ))}
-      </div>
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-dark opacity-50" />
 
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
@@ -49,15 +26,15 @@ function Contact() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="wave-text">Get In Touch</span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gradient">
+            Get In Touch
           </h2>
-          <p className="text-primary-400 max-w-xl mx-auto">
+          <p className="text-glow max-w-xl mx-auto">
             Feel free to reach out for collaborations or just a friendly hello
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -66,51 +43,63 @@ function Contact() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            <div className="glass-ocean p-6 rounded-xl">
-              <h3 className="text-xl font-bold text-primary-400 mb-4">Contact Information</h3>
+            {/* Contact Information Card */}
+            <div className="glass-card p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-gradient mb-4">Contact Information</h3>
               <div className="space-y-4">
-                <div>
-                  <p className="text-gray-400">Email</p>
-                  <a href="mailto:adheerajkumar1@gmail.com" className="text-primary-400 hover:text-primary-300">
-                    adheerajkumar1@gmail.com
-                  </a>
+                <div className="flex items-center space-x-3">
+                  <span className="text-primary">📧</span>
+                  <div>
+                    <p className="text-sm text-gray-400">Email</p>
+                    <a href="mailto:adheerajkumar1@gmail.com" 
+                       className="text-white hover:text-primary transition-colors">
+                      adheerajkumar1@gmail.com
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-400">Phone</p>
-                  <a href="tel:+919390695922" className="text-primary-400 hover:text-primary-300">
-                    +91 9390695922
-                  </a>
+                
+                <div className="flex items-center space-x-3">
+                  <span className="text-primary">📱</span>
+                  <div>
+                    <p className="text-sm text-gray-400">Phone</p>
+                    <a href="tel:+919390695922" 
+                       className="text-white hover:text-primary transition-colors">
+                      +91 9390695922
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-400">Location</p>
-                  <p className="text-primary-400">
-                    Kompally, Hyderabad, India
-                  </p>
+                
+                <div className="flex items-center space-x-3">
+                  <span className="text-primary">📍</span>
+                  <div>
+                    <p className="text-sm text-gray-400">Location</p>
+                    <p className="text-white">Kompally, Hyderabad, India</p>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="glass-ocean p-6 rounded-xl">
-              <h3 className="text-xl font-bold text-primary-400 mb-4">Social Links</h3>
+            {/* Social Links Card */}
+            <div className="glass-card p-6 rounded-lg">
+              <h3 className="text-xl font-bold text-gradient mb-4">Social Links</h3>
               <div className="flex space-x-4">
-                <motion.a
-                  href="https://linkedin.com/in/your-profile"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className="text-primary-400 hover:text-primary-300"
-                >
-                  LinkedIn
-                </motion.a>
-                <motion.a
-                  href="https://github.com/your-profile"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -5 }}
-                  className="text-primary-400 hover:text-primary-300"
-                >
-                  GitHub
-                </motion.a>
+                {[
+                  { name: 'LinkedIn', url: 'https://linkedin.com/in/your-profile', icon: '💼' },
+                  { name: 'GitHub', url: 'https://github.com/your-profile', icon: '💻' }
+                ].map((social) => (
+                  <motion.a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="button"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <span className="mr-2">{social.icon}</span>
+                    {social.name}
+                  </motion.a>
+                ))}
               </div>
             </div>
           </motion.div>
@@ -122,42 +111,54 @@ function Contact() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <form onSubmit={handleSubmit} className="glass-ocean p-6 rounded-xl space-y-6">
+            <form onSubmit={handleSubmit} className="glass-card p-8 rounded-lg space-y-6">
               <div>
-                <label htmlFor="name" className="text-primary-400 block mb-2">Name</label>
+                <label htmlFor="name" className="text-sm text-gray-400 block mb-2">
+                  Name
+                </label>
                 <input
                   type="text"
                   id="name"
-                  className="w-full bg-gray-800/50 border border-primary-500/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary-500 transition-colors"
+                  className="input-modern w-full"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
                 />
               </div>
+
               <div>
-                <label htmlFor="email" className="text-primary-400 block mb-2">Email</label>
+                <label htmlFor="email" className="text-sm text-gray-400 block mb-2">
+                  Email
+                </label>
                 <input
                   type="email"
                   id="email"
-                  className="w-full bg-gray-800/50 border border-primary-500/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary-500 transition-colors"
+                  className="input-modern w-full"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
                 />
               </div>
+
               <div>
-                <label htmlFor="message" className="text-primary-400 block mb-2">Message</label>
+                <label htmlFor="message" className="text-sm text-gray-400 block mb-2">
+                  Message
+                </label>
                 <textarea
                   id="message"
                   rows="4"
-                  className="w-full bg-gray-800/50 border border-primary-500/30 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-primary-500 transition-colors"
+                  className="input-modern w-full resize-none"
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required
                 ></textarea>
               </div>
+
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full bg-primary-600/80 text-white py-3 rounded-lg hover:bg-primary-500 transition-colors"
+                className="button w-full"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
                 Send Message
               </motion.button>
@@ -165,11 +166,11 @@ function Contact() {
           </motion.div>
         </div>
 
-        {/* Floating particles */}
-        {[...Array(10)].map((_, i) => (
+        {/* Decorative Elements */}
+        {[...Array(15)].map((_, i) => (
           <motion.div
             key={`particle-${i}`}
-            className="absolute w-1 h-1 rounded-full bg-primary-400/40"
+            className="absolute w-1 h-1 rounded-full bg-primary/40"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,

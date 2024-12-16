@@ -6,7 +6,7 @@ function Projects() {
     {
       title: "RV Security - RBAC Dashboard",
       description: "A frontend security dashboard with role-based access controls, featuring responsive dark-theme UI and real-time analytics.",
-      image:  `${process.env.PUBLIC_URL}/p2.png`, // Replace with your project image
+      image: `${process.env.PUBLIC_URL}/p2.png`,
       tags: ["React", "TailwindCSS", "Vite"],
       achievements: [
         "Reduced vulnerabilities by 40% with role-based access",
@@ -18,7 +18,7 @@ function Projects() {
     {
       title: "CulinAIry Compass",
       description: "An advanced recipe recommender system using machine learning and neural networks for personalized suggestions.",
-      image:  `${process.env.PUBLIC_URL}/p1.png`, // Replace with your project image
+      image: `${process.env.PUBLIC_URL}/p1.png`,
       tags: ["Python", "Flask", "Machine Learning", "HTML/CSS/JS"],
       achievements: [
         "Boosted recommendation accuracy by 35%",
@@ -31,31 +31,6 @@ function Projects() {
 
   return (
     <section id="projects" className="py-20 relative overflow-hidden">
-      {/* Animated wave background */}
-      <div className="absolute inset-0 z-0">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-full"
-            style={{
-              height: `${300 + i * 50}px`,
-              background: `linear-gradient(to bottom, transparent, rgba(79, 209, 197, ${0.03 + i * 0.01}))`,
-              filter: 'blur(4px)',
-              bottom: `-${i * 20}px`,
-            }}
-            animate={{
-              y: ['0%', '5%', '0%'],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: i * 0.5,
-            }}
-          />
-        ))}
-      </div>
-
       <div className="container mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -64,15 +39,15 @@ function Projects() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="wave-text">Featured Projects</span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gradient">
+            Featured Projects
           </h2>
-          <p className="text-primary-400 max-w-xl mx-auto">
+          <p className="text-glow max-w-xl mx-auto">
             Showcasing my expertise in AI/ML and web development
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="card-grid">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
@@ -80,19 +55,18 @@ function Projects() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.2 }}
               viewport={{ once: true }}
-              className="glass-ocean rounded-xl overflow-hidden hover:shadow-2xl transition-all duration-300"
+              className="project-card"
             >
-              <div className="relative overflow-hidden group">
+              <div className="image-modern">
                 <img 
                   src={project.image} 
                   alt={project.title}
-                  className="w-full h-48 object-cover transform group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-48 object-cover"
                 />
-                <div className="absolute inset-0 bg-primary-600/20 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
 
               <div className="p-6">
-                <h3 className="text-xl font-bold text-white mb-3 wave-text">
+                <h3 className="text-xl font-bold text-white mb-3 text-gradient">
                   {project.title}
                 </h3>
                 <p className="text-gray-300 mb-4">
@@ -100,10 +74,10 @@ function Projects() {
                 </p>
 
                 <div className="mb-4">
-                  <h4 className="text-sm font-semibold text-primary-400 mb-2">Key Achievements:</h4>
-                  <ul className="list-disc list-inside text-gray-300 space-y-1">
+                  <h4 className="text-sm font-semibold text-primary mb-2">Key Achievements:</h4>
+                  <ul className="list-modern">
                     {project.achievements.map((achievement, i) => (
-                      <li key={i}>{achievement}</li>
+                      <li key={i} className="text-gray-300">{achievement}</li>
                     ))}
                   </ul>
                 </div>
@@ -112,7 +86,7 @@ function Projects() {
                   {project.tags.map((tag, i) => (
                     <span 
                       key={i}
-                      className="px-3 py-1 text-sm bg-primary-500/10 text-primary-400 rounded-full"
+                      className="skill-badge"
                     >
                       {tag}
                     </span>
@@ -121,9 +95,9 @@ function Projects() {
 
                 <motion.a
                   href={project.link}
-                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="inline-block bg-primary-600/80 text-white px-6 py-2 rounded-full hover:bg-primary-500 transition-all duration-300"
+                  className="button"
                 >
                   View Project
                 </motion.a>
@@ -132,11 +106,11 @@ function Projects() {
           ))}
         </div>
 
-        {/* Floating particles */}
+        {/* Floating particles with modern effects */}
         {[...Array(10)].map((_, i) => (
           <motion.div
             key={`particle-${i}`}
-            className="absolute w-1 h-1 rounded-full bg-primary-400/40"
+            className="absolute w-1 h-1 rounded-full bg-primary/40"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,

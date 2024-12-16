@@ -56,33 +56,7 @@ function Skills() {
 
   return (
     <section id="skills" className="py-20 relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 z-0">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-full"
-            style={{
-              height: `${400 + i * 50}px`,
-              background: `linear-gradient(to bottom, transparent, rgba(79, 209, 197, ${0.03 + i * 0.01}))`,
-              filter: 'blur(4px)',
-              bottom: `-${i * 20}px`,
-            }}
-            animate={{
-              y: ['0%', '5%', '0%'],
-            }}
-            transition={{
-              duration: 8 + i * 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-              delay: i * 0.5,
-            }}
-          />
-        ))}
-      </div>
-
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -90,58 +64,56 @@ function Skills() {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">
-              Technical Skills
-            </span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gradient">
+            Technical Skills
           </h2>
         </motion.div>
 
         {/* Navigation Tabs */}
-        <div className="flex flex-wrap justify-center mb-12 gap-4 px-4">
+        <div className="flex flex-wrap justify-center mb-12 gap-4">
           {['skills', 'certifications', 'competitive'].map((tab) => (
-            <button
+            <motion.button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 rounded-full text-sm uppercase tracking-wider
-                        backdrop-blur-sm transition-all duration-300 ${
-                          activeTab === tab 
-                          ? 'bg-primary-500/20 text-primary-400 border border-primary-500/50' 
-                          : 'text-gray-400 hover:text-white border border-gray-700 hover:border-primary-500/30'
-                        }`}
+              className={`button ${activeTab === tab ? 'active' : ''}`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              {tab}
-            </button>
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </motion.button>
           ))}
         </div>
 
-        {/* Content Container */}
-        <div className="backdrop-blur-sm bg-gray-900/50 rounded-xl p-4 md:p-8 border border-gray-700/50">
-          {/* Skills Grid */}
+        {/* Skills Content */}
+        <div className="max-w-6xl mx-auto">
           {activeTab === 'skills' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid gap-8">
               {Object.entries(skillCategories).map(([key, category]) => (
                 <motion.div
                   key={key}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-gray-800/30 backdrop-blur-sm rounded-lg p-6
-                            border border-gray-700/50 hover:border-primary-500/30
-                            transition-all duration-300"
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  viewport={{ once: true }}
+                  className="glass-card p-6 rounded-lg"
                 >
-                  <div className="flex items-center mb-6 space-x-3">
-                    <div className="text-primary-400">{category.icon}</div>
-                    <h3 className="text-lg text-gray-200">{category.title}</h3>
+                  <div className="flex items-center gap-3 mb-6">
+                    <span className="text-primary">{category.icon}</span>
+                    <h3 className="text-xl font-bold text-gradient">{category.title}</h3>
                   </div>
-                  <div className="space-y-4">
+
+                  <div className="grid gap-4">
                     {category.items.map((item) => (
-                      <div key={item.name} className="relative">
+                      <div
+                        key={item.name}
+                        className="relative"
+                        onMouseEnter={() => setHoveredSkill(item.name)}
+                        onMouseLeave={() => setHoveredSkill(null)}
+                      >
                         <motion.div
-                          className={`transition-all duration-300 ${
-                            hoveredSkill === item.name ? 'mb-20' : 'mb-2'
-                          }`}
-                          onHoverStart={() => setHoveredSkill(item.name)}
-                          onHoverEnd={() => setHoveredSkill(null)}
+                          className="p-4 rounded-lg bg-gray-800/50 hover:bg-gray-800/70
+                                   border border-gray-700/50 transition-all duration-300"
+                          whileHover={{ scale: 1.02 }}
                         >
                           <div className="flex items-center justify-between">
                             <span className="text-gray-300">{item.name}</span>
@@ -151,7 +123,7 @@ function Skills() {
                               initial={{ width: 0 }}
                               animate={{ width: '100%' }}
                               transition={{ duration: 1 }}
-                              className="h-full bg-gradient-to-r from-primary-500/40 to-secondary-500/40 rounded-full"
+                              className="h-full bg-gradient-to-r from-primary/40 to-secondary/40 rounded-full"
                             />
                           </div>
 
@@ -163,16 +135,14 @@ function Skills() {
                               height: hoveredSkill === item.name ? 'auto' : 0,
                             }}
                             transition={{ duration: 0.2 }}
-                            className="absolute left-0 right-0 mt-2 overflow-hidden"
+                            className="overflow-hidden"
                           >
-                            <div className="bg-gray-800/90 rounded-lg p-3 border border-gray-700/50">
+                            <div className="mt-2">
                               <div className="flex flex-wrap gap-2">
                                 {item.specialty.map((spec) => (
                                   <span
                                     key={spec}
-                                    className="px-2 py-1 text-xs rounded-full
-                                             bg-primary-500/10 text-primary-400 
-                                             border border-primary-500/20"
+                                    className="skill-badge"
                                   >
                                     {spec}
                                   </span>
@@ -202,10 +172,9 @@ function Skills() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-center space-x-4 p-4 bg-gray-800/30 rounded-lg
-                            border border-gray-700/50 hover:border-primary-500/30"
+                  className="glass-card p-6 rounded-lg flex items-center gap-4"
                 >
-                  <FaCertificate className="text-2xl text-primary-400 flex-shrink-0" />
+                  <FaCertificate className="text-2xl text-primary flex-shrink-0" />
                   <span className="text-gray-300">{cert}</span>
                 </motion.div>
               ))}
@@ -225,11 +194,10 @@ function Skills() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="p-6 bg-gray-800/30 rounded-lg text-center
-                            border border-gray-700/50 hover:border-primary-500/30"
+                  className="glass-card p-6 rounded-lg text-center"
                 >
-                  <FaTrophy className="text-3xl text-primary-400 mx-auto mb-4" />
-                  <h4 className="text-xl text-gray-200 mb-2">{item.platform}</h4>
+                  <FaTrophy className="text-3xl text-primary mx-auto mb-4" />
+                  <h4 className="text-xl text-gradient mb-2">{item.platform}</h4>
                   <p className="text-gray-300">{item.achievement}</p>
                   <p className="text-sm text-gray-400">{item.rank}</p>
                 </motion.div>
@@ -237,6 +205,28 @@ function Skills() {
             </motion.div>
           )}
         </div>
+
+        {/* Background Particles */}
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={`particle-${i}`}
+            className="absolute w-1 h-1 rounded-full bg-primary/40"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              opacity: [0.2, 0.5, 0.2],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 5,
+              repeat: Infinity,
+              ease: 'easeInOut',
+              delay: Math.random() * 5,
+            }}
+          />
+        ))}
       </div>
     </section>
   );

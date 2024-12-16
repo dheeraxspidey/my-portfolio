@@ -13,31 +13,39 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navItems = [
+    { name: 'Home', href: '#home' },
+    { name: 'About', href: '#about' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Contact', href: '#contact' }
+  ];
+
   return (
     <motion.nav
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-gray-900/80 backdrop-blur-md' : 'bg-transparent'
+        scrolled ? 'glass-nav backdrop-blur-md' : 'bg-transparent'
       }`}
     >
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-20">
-          {/* Logo Container */}
+          {/* Logo */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="flex items-center"
           >
-            <div className="p-1 rounded-xl bg-gray-800/30 backdrop-blur-sm border border-gray-700/30">
+            <div className="glass-card p-1 rounded-xl">
               <img
                 src={`${process.env.PUBLIC_URL}/logo.png`}
                 alt="Dheeraj Kumar Logo"
                 className="h-14 w-14 object-contain rounded-lg"
                 style={{
-                  filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.2))'
+                  filter: 'drop-shadow(0 0 8px rgba(var(--primary-rgb), 0.3))'
                 }}
               />
             </div>
@@ -45,24 +53,18 @@ function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {[
-              { name: 'Home', href: '#home' },
-              { name: 'About', href: '#about' },
-              { name: 'Skills', href: '#skills' },
-              { name: 'Projects', href: '#projects' },
-              { name: 'Contact', href: '#contact' }
-            ].map((item, index) => (
+            {navItems.map((item, index) => (
               <motion.a
                 key={item.name}
                 href={item.href}
-                className="text-white hover:text-primary-400 transition-all duration-300 relative group text-sm font-medium"
+                className="nav-link"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 + index * 0.1 }}
                 whileHover={{ y: -2 }}
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-400 transition-all duration-300 group-hover:w-full" />
+                <span className="nav-link-underline" />
               </motion.a>
             ))}
           </div>
@@ -70,7 +72,7 @@ function Navbar() {
           {/* Contact Button - Desktop */}
           <motion.a
             href="#contact"
-            className="hidden md:flex items-center px-4 py-2 rounded-lg bg-primary-500/10 border border-primary-500/20 text-primary-400 hover:bg-primary-500/20 transition-all duration-300 text-sm font-medium"
+            className="hidden md:flex button"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -80,7 +82,8 @@ function Navbar() {
           {/* Mobile Menu Button */}
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-800/30 transition-colors"
+            className="md:hidden button-icon"
+            aria-label="Toggle menu"
           >
             <svg
               className="w-6 h-6 text-white"
@@ -99,7 +102,7 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown - Updated styles */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -107,25 +110,25 @@ function Navbar() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800"
+            className="glass-nav md:hidden border-t border-gray-700/30"
           >
             <div className="px-4 py-6 space-y-4">
-              {['Home', 'About', 'Skills', 'Projects', 'Contact'].map((item) => (
+              {navItems.map((item) => (
                 <motion.a
-                  key={item}
-                  href={`#${item.toLowerCase()}`}
-                  className="block px-4 py-3 text-gray-100 hover:text-primary-400 transition-colors duration-300 text-lg font-medium"
+                  key={item.name}
+                  href={item.href}
+                  className="mobile-nav-link"
                   onClick={() => setIsOpen(false)}
                   whileHover={{ x: 5 }}
                   initial={{ x: -10, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
                 >
-                  {item}
+                  {item.name}
                 </motion.a>
               ))}
               <motion.a
                 href="#contact"
-                className="block px-4 py-3 mt-6 text-center rounded-lg bg-primary-500/20 border border-primary-500/30 text-white font-medium text-lg hover:bg-primary-500/30 transition-all duration-300"
+                className="button block text-center"
                 onClick={() => setIsOpen(false)}
                 whileHover={{ scale: 1.02 }}
               >

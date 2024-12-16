@@ -58,51 +58,49 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+    <div className="relative min-h-screen optimize-mobile bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
       <BackgroundOverlay />
       <WaveBackground />
 
-      <div className="relative z-[1]">
-        <Navbar />
+      <div className="relative z-10">
+        <nav className="sticky top-0 z-50 nav-elegant">
+          <Navbar />
+        </nav>
 
-        <main ref={mainContentRef} className="container mx-auto px-4 md:px-6 py-8">
-          {/* Critical sections rendered immediately */}
-          <section className="mb-24 transform-gpu">
-            <Hero />
-          </section>
-
-          <section className="mb-24 backdrop-blur-sm bg-gray-800/10 rounded-2xl p-8 transform-gpu">
-            <About />
-          </section>
-
-          <section className="mb-24 backdrop-blur-sm bg-gray-800/10 rounded-2xl p-8 transform-gpu">
-            <Skills />
-          </section>
-
-          {/* Non-critical sections lazy loaded */}
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
           <Suspense fallback={<LoadingSpinner />}>
-            <section className="mb-24 transform-gpu">
-              <Projects />
-            </section>
+            <main className="container mx-auto px-4 md:px-6 py-8 content-visibility-auto">
+              <section className="mb-24 hw-accelerated">
+                <Hero />
+              </section>
 
-            <section className="mb-24 transform-gpu">
-              <Contact />
-            </section>
+              <section className="mb-24 card-elegant">
+                <About />
+              </section>
 
-            <Footer />
+              <section className="mb-24 card-elegant">
+                <Skills />
+              </section>
+
+              <section className="mb-24 card-elegant">
+                <Projects />
+              </section>
+
+              <section className="mb-24 card-elegant">
+                <Contact />
+              </section>
+
+              <Footer />
+            </main>
+            
+            <div className="fixed bottom-8 right-8">
+              <ScrollToTop />
+            </div>
           </Suspense>
-        </main>
-
-        <div className="fixed bottom-8 right-8 transform-gpu">
-          <Suspense fallback={null}>
-            <ScrollToTop />
-          </Suspense>
-        </div>
+        )}
       </div>
     </div>
   );
