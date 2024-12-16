@@ -549,3 +549,38 @@ html {
     perspective: 1000px;
   }
 }
+
+/* Chrome-specific optimizations */
+@supports (-webkit-appearance:none) {
+  .transform-gpu {
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    will-change: transform;
+  }
+  
+  /* Optimize animations */
+  .animate-spin {
+    -webkit-transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+  }
+  
+  /* Smooth scrolling only on stable connections */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+/* Reduce paint operations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimize fixed elements */
+.fixed {
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
