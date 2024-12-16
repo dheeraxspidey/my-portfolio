@@ -67,7 +67,7 @@ function App() {
       <BackgroundOverlay />
       <WaveBackground />
 
-      <div className="relative z-10 transform-gpu">
+      <div className="relative z-[1]">
         <Navbar />
 
         <main ref={mainContentRef} className="container mx-auto px-4 md:px-6 py-8">
