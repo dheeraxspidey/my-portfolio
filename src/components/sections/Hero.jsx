@@ -1,8 +1,55 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 
 function Hero() {
+  // Memoize the background dots to prevent re-rendering
+  const BackgroundDots = useMemo(() => (
+    <div className="absolute inset-0 pointer-events-none opacity-20">
+      {[...Array(100)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-white rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: 2 + Math.random() * 2,
+            repeat: Infinity,
+            delay: Math.random() * 2,
+          }}
+        />
+      ))}
+    </div>
+  ), []);
+
+  // Memoize the typing sequences
+  const titleSequence = useMemo(() => [
+    'Hello World!',
+    400,
+    'Hi there!',
+    1000,
+    'Hi, I am Dheeraj',
+    1000,
+    'Hi, I am Dheeraj Kumar',
+    2000,
+    () => console.log('Done typing!'),
+  ], []);
+
+  const roleSequence = useMemo(() => [
+    3000,
+    'AI/ML Engineer',
+    2000,
+    'Full Stack Developer',
+    2000,
+    'Data Scientist',
+    2000,
+  ], []);
+
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-[120px] md:pt-0">
       <div className="container mx-auto px-4 z-10">
@@ -21,17 +68,7 @@ function Hero() {
               className="mb-6"
             >
               <TypeAnimation
-                sequence={[
-                  'Hello World!',
-                  400,
-                  'Hi there!',
-                  1000,
-                  'Hi, I am Dheeraj',
-                  1000,
-                  'Hi, I am Dheeraj Kumar',
-                  2000,
-                  () => console.log('Done typing!'),
-                ]}
+                sequence={titleSequence}
                 wrapper="h1"
                 cursor={true}
                 repeat={Infinity}
@@ -52,15 +89,7 @@ function Hero() {
             transition={{ delay: 0.5, duration: 0.5 }}
           >
             <TypeAnimation
-              sequence={[
-                3000,
-                'AI/ML Engineer',
-                2000,
-                'Full Stack Developer',
-                2000,
-                'Data Scientist',
-                2000,
-              ]}
+              sequence={roleSequence}
               wrapper="p"
               cursor={true}
               repeat={Infinity}
@@ -70,31 +99,13 @@ function Hero() {
             />
           </motion.div>
 
-          {/* Matrix-style background dots */}
-          <div className="absolute inset-0 pointer-events-none opacity-20">
-            {[...Array(100)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-white rounded-full"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-                animate={{
-                  opacity: [0, 1, 0],
-                }}
-                transition={{
-                  duration: 2 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2,
-                }}
-              />
-            ))}
-          </div>
+          {/* Memoized background dots */}
+          {BackgroundDots}
         </motion.div>
       </div>
     </section>
   );
 }
 
-export default Hero;
+// Prevent unnecessary re-renders
+export default React.memo(Hero);

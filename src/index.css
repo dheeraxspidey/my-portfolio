@@ -526,6 +526,8 @@ html {
     0 0 1px #fff,
     0 0 2px #fff,
     0 0 3px #fff;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .style-matrix-subtle {
@@ -536,4 +538,14 @@ html {
 @keyframes dotFade {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 1; }
+}
+
+/* Optimize animations */
+@layer utilities {
+  .optimize-animation {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    perspective: 1000px;
+  }
 }
