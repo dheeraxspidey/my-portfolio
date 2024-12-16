@@ -1,36 +1,60 @@
-import React, { useState, useEffect } from 'react';
-import Navbar from './components/layout/Navbar';
-import Hero from './components/sections/Hero';
-import Projects from './components/sections/Projects';
-import About from './components/sections/About';
-import Contact from './components/sections/Contact';
-import Footer from './components/layout/Footer';
-import ScrollToTop from './components/common/ScrollToTop';
-import LoadingScreen from './components/common/LoadingScreen';
-import Skills from './components/sections/Skills';
-import WaveBackground from './components/common/WaveBackground';
-import BackgroundOverlay from './components/common/BackgroundOverlay';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import LoadingScreen from './components/common/LoadingScreen';
+import BackgroundOverlay from './components/common/BackgroundOverlay';
+import WaveBackground from './components/common/WaveBackground';
+import Navbar from './components/layout/Navbar';
+
+// Lazy load non-critical components
+const Hero = lazy(() => import('./components/sections/Hero'));
+const About = lazy(() => import('./components/sections/About'));
+const Projects = lazy(() => import('./components/sections/Projects'));
+const Skills = lazy(() => import('./components/sections/Skills'));
+const Contact = lazy(() => import('./components/sections/Contact'));
+const Footer = lazy(() => import('./components/layout/Footer'));
+const ScrollToTop = lazy(() => import('./components/common/ScrollToTop'));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isContentVisible, setIsContentVisible] = useState(false);
 
   const handleLoadingComplete = () => {
-    // Add a delay before hiding the loading screen
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500); // 8 seconds total loading time
+    setIsLoading(false);
+    // Delay content appearance for smooth transition
+    setTimeout(() => setIsContentVisible(true), 100);
   };
 
-  // Optional: Force minimum loading time
+  // Preload critical assets
   useEffect(() => {
-    const minLoadingTime = setTimeout(() => {
-      // This ensures the loading screen shows for at least X seconds
-      // even if everything loads quickly
-    }, 3000);
+    const preloadImages = async () => {
+      const imageUrls = [
+        '/2.jpg', // Background image
+        // Add other critical images here
+      ];
 
-    return () => clearTimeout(minLoadingTime);
+      try {
+        await Promise.all(
+          imageUrls.map(url => {
+            return new Promise((resolve, reject) => {
+              const img = new Image();
+              img.src = url;
+              img.onload = resolve;
+              img.onerror = reject;
+            });
+          })
+        );
+      } catch (error) {
+        console.warn('Image preloading failed:', error);
+      }
+    };
+
+    preloadImages();
   }, []);
+
+  // Component loading fallback
+  const LoadingFallback = () => (
+    <div className="h-screen bg-gray-900 animate-pulse" />
+  );
 
   return (
     <>
@@ -41,26 +65,28 @@ function App() {
           <motion.div
             key="content"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: isContentVisible ? 1 : 0 }}
             transition={{ duration: 0.5 }}
             className="relative min-h-screen"
           >
-            {/* Background layers */}
+            {/* Background layers - Always render these first */}
             <BackgroundOverlay />
             <WaveBackground />
 
-            {/* Main content */}
+            {/* Main content with progressive loading */}
             <div className="relative z-10">
               <Navbar />
-              <main>
-                <Hero />
-                <About />
-                <Projects />
-                <Skills />
-                <Contact />
-                <Footer />
-              </main>
-              <ScrollToTop />
+              <Suspense fallback={<LoadingFallback />}>
+                <main>
+                  <Hero />
+                  <About />
+                  <Projects />
+                  <Skills />
+                  <Contact />
+                  <Footer />
+                </main>
+                <ScrollToTop />
+              </Suspense>
             </div>
           </motion.div>
         )}
@@ -69,4 +95,5 @@ function App() {
   );
 }
 
-export default App;
+// Performance optimization: Memoize the entire app
+export default React.memo(App);

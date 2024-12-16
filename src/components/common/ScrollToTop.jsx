@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function ScrollToTop() {
+const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
+    // Use Intersection Observer instead of scroll event
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(!entry.isIntersecting);
+      },
+      { threshold: 0, rootMargin: '0px' }
+    );
 
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    const target = document.createElement('div');
+    target.style.height = '10px';
+    target.style.position = 'absolute';
+    target.style.top = '0';
+    document.body.appendChild(target);
+
+    observer.observe(target);
+
+    return () => {
+      observer.disconnect();
+      document.body.removeChild(target);
+    };
   }, []);
 
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: 'smooth'
     });
   };
 
@@ -28,29 +38,34 @@ function ScrollToTop() {
     <AnimatePresence>
       {isVisible && (
         <motion.button
+          className="fixed bottom-8 right-8 p-3 bg-primary-500/20 
+                     hover:bg-primary-500/30 rounded-full z-50 
+                     border border-primary-500/30"
+          onClick={scrollToTop}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-3 rounded-full glass-ocean hover:bg-primary-600/80 transition-all duration-300"
+          transition={{ duration: 0.2 }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
           <svg
             className="w-6 h-6 text-primary-400"
             fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
             stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <path d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 10l7-7m0 0l7 7m-7-7v18"
+            />
           </svg>
         </motion.button>
       )}
     </AnimatePresence>
   );
-}
+};
 
-export default ScrollToTop;
+export default React.memo(ScrollToTop);
