@@ -13,8 +13,8 @@
   --gradient-dark: linear-gradient(to bottom, rgba(17, 24, 39, 0.8), rgba(17, 24, 39, 0.95));
   
   /* Glass Effects */
-  --glass-background: rgba(17, 24, 39, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-background: rgba(17, 24, 39, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.1);
   --glass-shine: rgba(255, 255, 255, 0.05);
   --glass-shadow: rgba(0, 0, 0, 0.1);
   
@@ -155,10 +155,10 @@ body {
 
 /* Modern Glass Card */
 .glass-card {
-  background: var(--glass-background);
-  backdrop-filter: blur(var(--blur-md));
-  -webkit-backdrop-filter: blur(var(--blur-md));
-  border: 1px solid var(--glass-border);
+  background: rgba(17, 24, 39, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--shadow-md);
   transition: transform var(--transition-normal), 
               box-shadow var(--transition-normal);
@@ -167,7 +167,25 @@ body {
 .glass-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg),
-              0 0 20px rgba(56, 189, 248, 0.2);
+              0 0 20px rgba(56, 189, 248, 0.15);
+  background: rgba(17, 24, 39, 0.4);
+}
+
+/* Hero Section Enhancements */
+.hero-glass-card {
+  background: rgba(17, 24, 39, 0.2);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all var(--transition-normal);
+}
+
+.hero-glass-card:hover {
+  background: rgba(17, 24, 39, 0.25);
+  transform: translateY(-1px);
 }
 
 /* Modern Button */
@@ -226,6 +244,36 @@ body {
   box-shadow: 
     inset 0 0 40px rgba(56, 189, 248, 0.1),
     var(--shadow-lg);
+}
+
+/* 3D Scene Integration */
+.hero-3d-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-3d-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Enhanced Hero Section */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(1px);
+}
+
+.hero-glass-enhanced {
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Modern Text Effects */
@@ -459,6 +507,14 @@ body {
   .text-glow {
     text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
   }
+
+  .hero-3d-container {
+    opacity: 0.6;
+  }
+  
+  .hero-3d-container canvas {
+    filter: blur(0.5px);
+  }
 }
 
 /* Touch Device Optimizations */
@@ -471,5 +527,17 @@ body {
   .glass-card:hover,
   .skill-badge:hover {
     transform: none;
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .hero-3d-container {
+    opacity: 0.3;
+  }
+  
+  .hero-3d-container * {
+    animation: none !important;
+    transition: none !important;
   }
 }

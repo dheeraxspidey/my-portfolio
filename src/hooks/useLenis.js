@@ -20,8 +20,10 @@ export const useLenis = () => {
 
     // Animation frame loop
     function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
+      if (lenis) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
     }
 
     requestAnimationFrame(raf);
