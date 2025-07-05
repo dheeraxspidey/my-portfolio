@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { scrollToSection } from '../../hooks/useLenis';
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -12,6 +13,11 @@ function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleNavClick = (e, href) => {
+    e.preventDefault();
+    scrollToSection(href);
+  };
 
   const navItems = [
     { name: 'Home', href: '#home' },
@@ -41,7 +47,7 @@ function Navbar() {
           >
             <div className="glass-card p-1 rounded-xl">
               <img
-                src={`${process.env.PUBLIC_URL}/logo.png`}
+                src="/logo.png"
                 alt="Dheeraj Kumar Logo"
                 className="h-14 w-14 object-contain rounded-lg"
                 style={{
@@ -57,6 +63,7 @@ function Navbar() {
               <motion.a
                 key={item.name}
                 href={item.href}
+                onClick={(e) => handleNavClick(e, item.href)}
                 className="nav-link"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -72,6 +79,7 @@ function Navbar() {
           {/* Contact Button - Desktop */}
           <motion.a
             href="#contact"
+            onClick={(e) => handleNavClick(e, '#contact')}
             className="hidden md:flex button"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -117,8 +125,11 @@ function Navbar() {
                 <motion.a
                   key={item.name}
                   href={item.href}
+                  onClick={(e) => {
+                    handleNavClick(e, item.href);
+                    setIsOpen(false);
+                  }}
                   className="mobile-nav-link"
-                  onClick={() => setIsOpen(false)}
                   whileHover={{ x: 5 }}
                   initial={{ x: -10, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
@@ -128,8 +139,11 @@ function Navbar() {
               ))}
               <motion.a
                 href="#contact"
+                onClick={(e) => {
+                  handleNavClick(e, '#contact');
+                  setIsOpen(false);
+                }}
                 className="button block text-center"
-                onClick={() => setIsOpen(false)}
                 whileHover={{ scale: 1.02 }}
               >
                 Let's Connect

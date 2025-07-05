@@ -6,7 +6,7 @@ function Projects() {
     {
       title: "RV Security - RBAC Dashboard",
       description: "A frontend security dashboard with role-based access controls, featuring responsive dark-theme UI and real-time analytics.",
-      image: `${process.env.PUBLIC_URL}/p2.png`,
+      image: "/p2.png",
       tags: ["React", "TailwindCSS", "Vite"],
       achievements: [
         "Reduced vulnerabilities by 40% with role-based access",
@@ -18,7 +18,7 @@ function Projects() {
     {
       title: "CulinAIry Compass",
       description: "An advanced recipe recommender system using machine learning and neural networks for personalized suggestions.",
-      image: `${process.env.PUBLIC_URL}/p1.png`,
+      image: "/p1.png",
       tags: ["Python", "Flask", "Machine Learning", "HTML/CSS/JS"],
       achievements: [
         "Boosted recommendation accuracy by 35%",

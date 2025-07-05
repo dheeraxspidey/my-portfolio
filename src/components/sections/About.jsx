@@ -1,7 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useScrollReveal } from '../../hooks/useScrollEffects';
 
 function About() {
+  const [titleRef, titleVisible] = useScrollReveal();
+  const [leftRef, leftVisible] = useScrollReveal();
+  const [rightRef, rightVisible] = useScrollReveal();
+
   const education = [
     {
       degree: "B.Tech in CSE-AIML",
@@ -51,12 +56,9 @@ function About() {
   return (
     <section id="about" className="py-20 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
+        <div
+          ref={titleRef}
+          className={`text-center mb-12 scroll-reveal ${titleVisible ? 'revealed' : ''}`}
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gradient">
             About Me
@@ -64,16 +66,13 @@ function About() {
           <p className="text-glow max-w-xl mx-auto">
             Passionate about AI/ML and Software Development
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {/* About Text & Achievements */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="space-y-6"
+          <div
+            ref={leftRef}
+            className={`space-y-6 scroll-reveal ${leftVisible ? 'revealed' : ''}`}
           >
             <div className="glass-card p-6 rounded-lg">
               <h3 className="text-xl font-bold text-gradient mb-4">Who I Am</h3>
@@ -106,15 +105,12 @@ function About() {
                 ))}
               </ul>
             </div>
-          </motion.div>
+          </div>
 
           {/* Education */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className="space-y-6"
+          <div
+            ref={rightRef}
+            className={`space-y-6 scroll-reveal ${rightVisible ? 'revealed' : ''}`}
           >
             <div className="glass-card p-6 rounded-lg">
               <h3 className="text-xl font-bold text-gradient mb-6">Education Journey</h3>
@@ -144,7 +140,7 @@ function About() {
             >
               Download CV
             </motion.a>
-          </motion.div>
+          </div>
         </div>
 
         {/* Experience Timeline */}

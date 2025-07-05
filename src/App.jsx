@@ -2,6 +2,7 @@ import React, { useState, useEffect, lazy, Suspense, useCallback, useRef } from 
 import BackgroundOverlay from './components/common/BackgroundOverlay';
 import WaveBackground from './components/common/WaveBackground';
 import Navbar from './components/layout/Navbar';
+import { useLenis } from './hooks/useLenis';
 
 // Eager load critical components
 import Hero from './components/sections/Hero';
@@ -23,6 +24,9 @@ const LoadingSpinner = React.memo(() => (
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const mainContentRef = useRef(null);
+  
+  // Initialize Lenis smooth scrolling
+  useLenis();
 
   // Chrome-specific optimizations
   useEffect(() => {
@@ -59,7 +63,7 @@ function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen optimize-mobile bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+    <div className="relative min-h-screen optimize-mobile bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 smooth-scroll-container lenis-smooth">
       <BackgroundOverlay />
       <WaveBackground />
 
@@ -73,23 +77,23 @@ function App() {
         ) : (
           <Suspense fallback={<LoadingSpinner />}>
             <main className="container mx-auto px-4 md:px-6 py-8 content-visibility-auto">
-              <section className="mb-24 hw-accelerated">
+              <section id="home" className="mb-24 hw-accelerated">
                 <Hero />
               </section>
 
-              <section className="mb-24 card-elegant">
+              <section id="about" className="mb-24 card-elegant">
                 <About />
               </section>
 
-              <section className="mb-24 card-elegant">
+              <section id="skills" className="mb-24 card-elegant">
                 <Skills />
               </section>
 
-              <section className="mb-24 card-elegant">
+              <section id="projects" className="mb-24 card-elegant">
                 <Projects />
               </section>
 
-              <section className="mb-24 card-elegant">
+              <section id="contact" className="mb-24 card-elegant">
                 <Contact />
               </section>
 

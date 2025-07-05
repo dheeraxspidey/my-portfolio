@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { scrollToSection } from '../../hooks/useLenis';
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -28,10 +29,7 @@ const ScrollToTop = () => {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    scrollToSection('#home');
   };
 
   return (

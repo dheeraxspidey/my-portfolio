@@ -1,34 +1,14 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import compression from 'vite-plugin-compression';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
 export default defineConfig({
-  plugins: [
-    react(),
-    compression({
-      algorithm: 'gzip',
-      ext: '.gz'
-    })
-  ],
-  build: {
-    target: 'esnext',
-    minify: 'terser',
-    cssMinify: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'vendor': ['react', 'react-dom'],
-          'animations': ['framer-motion'],
-          'background': [
-            './src/components/common/BackgroundOverlay.jsx',
-            './src/components/common/WaveBackground.jsx'
-          ]
-        }
-      }
-    },
-    chunkSizeWarningLimit: 1000
+  plugins: [react()],
+  server: {
+    port: 3000,
+    open: true
   },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'framer-motion']
+  build: {
+    outDir: 'dist',
+    sourcemap: true
   }
-}); 
+})
