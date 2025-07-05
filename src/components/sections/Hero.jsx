@@ -2,13 +2,17 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import CodingScene2D from '../ui/CodingScene2D';
 
-function Hero() {
+function Hero({ activeSection, onSectionTransition }) {
 
   return (
     <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* 2D Coding Scene Background */}
       <div className="absolute inset-0 z-0">
-        <CodingScene2D className="w-full h-full" />
+        <CodingScene2D 
+          className="w-full h-full" 
+          activeSection={activeSection}
+          onSectionTransition={onSectionTransition}
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-gray-900/10 via-transparent to-gray-900/20" />
       </div>
 

@@ -16,6 +16,14 @@ function Navbar() {
 
   const handleNavClick = (e, href) => {
     e.preventDefault();
+    
+    // Special handling for About section (modal-based)
+    if (href === '#about') {
+      // Dispatch custom event that CodingScene2D can listen to
+      window.dispatchEvent(new CustomEvent('openAboutModal'));
+      return;
+    }
+    
     scrollToSection(href);
   };
 

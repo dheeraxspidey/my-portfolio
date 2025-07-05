@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import AboutNew from '../sections/AboutNew';
+import SkillsNew from '../sections/SkillsNew';
+import ProjectsNew from '../sections/ProjectsNew';
+import ContactNew from '../sections/ContactNew';
 
-const CodingScene2D = ({ className = "" }) => {
+const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onSectionTransition }) => {
   const [currentLine, setCurrentLine] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
   const [showGreeting, setShowGreeting] = useState(false);
+  const [activeSection, setActiveSection] = useState(parentActiveSection || 'home');
+  const [cardTransition, setCardTransition] = useState(null);
+  const [activeSectionModal, setActiveSectionModal] = useState(null);
 
   const codeLines = [
-    "// Hi, I am Dheeraj Kumar!",
+    "// Welcome to my digital world!",
     "const developer = {",
     "  name: 'Dheeraj Kumar',",
     "  role: 'Full Stack Developer',",
@@ -16,7 +23,47 @@ const CodingScene2D = ({ className = "" }) => {
     "  dreams: 'Building the future'",
     "};",
     "",
-    "console.log('Welcome to my portfolio!');"
+    "console.log('Explore my journey!');"
+  ];
+
+  // Section card configurations
+  const sectionCards = [
+    {
+      id: 'about',
+      title: 'About Me',
+      subtitle: 'My Journey',
+      description: 'Discover my story',
+      color: '#3b82f6',
+      bgColor: 'rgba(59, 130, 246, 0.3)',
+      position: { x: 420, y: 130, width: 170, height: 60 }
+    },
+    {
+      id: 'skills',
+      title: 'Skills',
+      subtitle: 'Tech Stack',
+      description: 'React • Python • AI/ML',
+      color: '#10b981',
+      bgColor: 'rgba(16, 185, 129, 0.2)',
+      position: { x: 100, y: 100, width: 130, height: 55 }
+    },
+    {
+      id: 'projects',
+      title: 'Projects',
+      subtitle: 'My Work',
+      description: 'Amazing creations',
+      color: '#f59e0b',
+      bgColor: 'rgba(245, 158, 11, 0.2)',
+      position: { x: 480, y: 250, width: 140, height: 50 }
+    },
+    {
+      id: 'contact',
+      title: 'Contact',
+      subtitle: "Let's Connect",
+      description: 'Get in touch',
+      color: '#a855f7',
+      bgColor: 'rgba(168, 85, 247, 0.2)',
+      position: { x: 90, y: 250, width: 120, height: 45 }
+    }
   ];
 
   useEffect(() => {
@@ -42,6 +89,88 @@ const CodingScene2D = ({ className = "" }) => {
 
     return () => clearTimeout(greetingTimer);
   }, []);
+
+  // Update activeSection when parent changes
+  useEffect(() => {
+    if (parentActiveSection) {
+      setActiveSection(parentActiveSection);
+    }
+  }, [parentActiveSection]);
+
+  // Listen for about modal trigger from navbar
+  useEffect(() => {
+    const handleOpenAboutModal = () => {
+      handleCardClick('about');
+    };
+
+    window.addEventListener('openAboutModal', handleOpenAboutModal);
+    return () => window.removeEventListener('openAboutModal', handleOpenAboutModal);
+  }, []);
+
+  // Handle scroll-based section detection and card transitions
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'about', 'skills', 'projects', 'contact']; // Added 'about' back for navigation
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            if (activeSection !== section) {
+              setActiveSection(section);
+              
+              // Trigger card transition effect (but not for invisible about marker)
+              if (section !== 'home' && section !== 'about') {
+                setCardTransition(section);
+                setTimeout(() => setCardTransition(null), 1000);
+              }
+            }
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [activeSection]);
+
+  // Handle card click navigation
+  const handleCardClick = (sectionId) => {
+    if (activeSectionModal === sectionId) return; // Prevent double clicks
+    
+    setCardTransition(sectionId);
+    
+    // Trigger the zoom transition effect
+    setTimeout(() => {
+      setActiveSectionModal(sectionId);
+    }, 500);
+    
+    // Optional: Call parent callback for any additional handling
+    if (onSectionTransition) {
+      onSectionTransition(sectionId);
+    }
+  };
+
+  // Close section modal
+  const closeSectionModal = () => {
+    setActiveSectionModal(null);
+    setCardTransition(null);
+  };
+
+  // Handle escape key to close modals
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && activeSectionModal) {
+        closeSectionModal();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [activeSectionModal]);
 
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`}>
@@ -73,7 +202,7 @@ const CodingScene2D = ({ className = "" }) => {
 
       {/* Desk */}
       <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 800 400" className="w-full h-full">
+        <svg viewBox="0 0 800 400" className="w-full h-full" style={{ pointerEvents: 'auto' }}>
           {/* Desk surface */}
           <rect x="50" y="300" width="700" height="20" fill="#4a5568" rx="4" />
           
@@ -169,7 +298,7 @@ const CodingScene2D = ({ className = "" }) => {
                 x="215"
                 y={220 + index * 12}
                 fill={
-                  line.includes('Dheeraj') ? '#4ade80' :
+                  line.includes('Dheeraj') || line.includes('Welcome') ? '#4ade80' :
                   line.includes('const') || line.includes('console') ? '#60a5fa' :
                   line.includes("'") ? '#fbbf24' :
                   '#e2e8f0'
@@ -202,60 +331,175 @@ const CodingScene2D = ({ className = "" }) => {
                 exit={{ opacity: 0, y: -30, scale: 0.8 }}
                 transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
               >
-                {/* "Hi, I am Dheeraj" card - Made larger and more prominent */}
-                <motion.g
-                  animate={{ 
-                    y: [0, -10, 0],
-                    rotate: [0, 2, -2, 0]
-                  }}
-                  transition={{ 
-                    duration: 4, 
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <rect x="420" y="130" width="170" height="50" fill="rgba(59, 130, 246, 0.3)" stroke="#3b82f6" strokeWidth="2" rx="10" />
-                  <text x="505" y="150" textAnchor="middle" fill="#3b82f6" fontSize="12" fontWeight="bold">Hi, I am Dheeraj</text>
-                  <text x="505" y="165" textAnchor="middle" fill="#60a5fa" fontSize="9">Full Stack Developer</text>
-                  <text x="505" y="178" textAnchor="middle" fill="#93c5fd" fontSize="8">Building amazing things</text>
-                </motion.g>
-                
-                {/* Skills card */}
-                <motion.g
-                  animate={{ 
-                    y: [0, -8, 0],
-                    rotate: [0, -2, 2, 0]
-                  }}
-                  transition={{ 
-                    duration: 3.5, 
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.5
-                  }}
-                >
-                  <rect x="100" y="100" width="120" height="50" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" strokeWidth="1" rx="8" />
-                  <text x="160" y="115" textAnchor="middle" fill="#10b981" fontSize="9" fontWeight="bold">Skills</text>
-                  <text x="160" y="128" textAnchor="middle" fill="#34d399" fontSize="7">React • Python</text>
-                  <text x="160" y="140" textAnchor="middle" fill="#34d399" fontSize="7">AI/ML • Node.js</text>
-                </motion.g>
-                
-                {/* Passion card */}
-                <motion.g
-                  animate={{ 
-                    y: [0, -12, 0],
-                    rotate: [0, 3, -1, 0]
-                  }}
-                  transition={{ 
-                    duration: 5, 
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1
-                  }}
-                >
-                  <rect x="480" y="250" width="130" height="35" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" strokeWidth="1" rx="8" />
-                  <text x="545" y="265" textAnchor="middle" fill="#a855f7" fontSize="9" fontWeight="bold">Data Science</text>
-                  <text x="545" y="278" textAnchor="middle" fill="#c084fc" fontSize="7">Building the future</text>
-                </motion.g>
+                {sectionCards.map((card, index) => (
+                  <motion.g
+                    key={card.id}
+                    animate={{ 
+                      y: [0, -8 - index * 2, 0],
+                      rotate: [0, index % 2 === 0 ? 2 : -2, 0],
+                      scale: activeSection === card.id ? [1, 1.1, 1] : 1
+                    }}
+                    transition={{ 
+                      duration: 3.5 + index * 0.5, 
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: index * 0.3
+                    }}
+                    style={{ cursor: 'pointer', pointerEvents: 'all' }}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleCardClick(card.id);
+                    }}
+                  >
+                    {/* Enhanced card transition overlay effect */}
+                    <AnimatePresence>
+                      {cardTransition === card.id && (
+                        <>
+                          {/* Main transition circle */}
+                          <motion.circle
+                            cx={card.position.x + card.position.width / 2}
+                            cy={card.position.y + card.position.height / 2}
+                            r="10"
+                            fill={card.color}
+                            initial={{ r: 10, opacity: 0.8 }}
+                            animate={{ 
+                              r: [10, 200, 800],
+                              opacity: [0.8, 0.4, 0]
+                            }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 1.2, ease: "easeOut" }}
+                          />
+                          
+                          {/* Secondary ripple effect */}
+                          <motion.circle
+                            cx={card.position.x + card.position.width / 2}
+                            cy={card.position.y + card.position.height / 2}
+                            r="5"
+                            fill="none"
+                            stroke={card.color}
+                            strokeWidth="2"
+                            initial={{ r: 5, opacity: 1 }}
+                            animate={{ 
+                              r: [5, 100, 400],
+                              opacity: [1, 0.6, 0],
+                              strokeWidth: [2, 1, 0]
+                            }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                          />
+                          
+                          {/* Particle effects */}
+                          {[...Array(8)].map((_, i) => (
+                            <motion.circle
+                              key={`particle-${i}`}
+                              cx={card.position.x + card.position.width / 2}
+                              cy={card.position.y + card.position.height / 2}
+                              r="2"
+                              fill={card.color}
+                              initial={{ 
+                                scale: 0,
+                                x: 0,
+                                y: 0,
+                                opacity: 1
+                              }}
+                              animate={{ 
+                                scale: [0, 1, 0],
+                                x: Math.cos(i * Math.PI / 4) * 50,
+                                y: Math.sin(i * Math.PI / 4) * 50,
+                                opacity: [1, 0.5, 0]
+                              }}
+                              transition={{ 
+                                duration: 0.8,
+                                delay: 0.3,
+                                ease: "easeOut"
+                              }}
+                            />
+                          ))}
+                        </>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Main card */}
+                    <motion.rect 
+                      x={card.position.x} 
+                      y={card.position.y} 
+                      width={card.position.width} 
+                      height={card.position.height} 
+                      fill={card.bgColor} 
+                      stroke={card.color} 
+                      strokeWidth={activeSection === card.id ? "3" : "2"} 
+                      rx="10"
+                      animate={{
+                        strokeWidth: activeSection === card.id ? [2, 3, 2] : 2,
+                        fill: activeSection === card.id ? 
+                          [card.bgColor, card.color.replace(')', ', 0.5)').replace('rgb', 'rgba'), card.bgColor] : 
+                          card.bgColor
+                      }}
+                      transition={{ duration: 0.5 }}
+                    />
+                    
+                    {/* Card content */}
+                    <text 
+                      x={card.position.x + card.position.width / 2} 
+                      y={card.position.y + 18} 
+                      textAnchor="middle" 
+                      fill={card.color} 
+                      fontSize="11" 
+                      fontWeight="bold"
+                    >
+                      {card.title}
+                    </text>
+                    <text 
+                      x={card.position.x + card.position.width / 2} 
+                      y={card.position.y + 33} 
+                      textAnchor="middle" 
+                      fill={card.color.replace(')', ', 0.8)').replace('rgb', 'rgba')} 
+                      fontSize="8"
+                    >
+                      {card.subtitle}
+                    </text>
+                    {card.position.height > 50 && (
+                      <text 
+                        x={card.position.x + card.position.width / 2} 
+                        y={card.position.y + 46} 
+                        textAnchor="middle" 
+                        fill={card.color.replace(')', ', 0.6)').replace('rgb', 'rgba')} 
+                        fontSize="7"
+                      >
+                        {card.description}
+                      </text>
+                    )}
+
+                    {/* Active section indicator */}
+                    {activeSection === card.id && (
+                      <motion.circle
+                        cx={card.position.x + card.position.width - 10}
+                        cy={card.position.y + 10}
+                        r="4"
+                        fill={card.color}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: [0, 1.5, 1] }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    )}
+
+                    {/* Hover effect */}
+                    <motion.rect 
+                      x={card.position.x} 
+                      y={card.position.y} 
+                      width={card.position.width} 
+                      height={card.position.height} 
+                      fill="transparent" 
+                      rx="10"
+                      whileHover={{ 
+                        stroke: card.color,
+                        strokeWidth: 3,
+                        filter: "drop-shadow(0 0 10px " + card.color + ")"
+                      }}
+                      transition={{ duration: 0.2 }}
+                    />
+                  </motion.g>
+                ))}
               </motion.g>
             )}
           </AnimatePresence>
@@ -286,6 +530,28 @@ const CodingScene2D = ({ className = "" }) => {
           ))}
         </svg>
       </div>
+
+      {/* Section Modals */}
+      <AboutNew 
+        isActive={activeSectionModal === 'about'} 
+        onClose={closeSectionModal}
+        cardTheme={sectionCards.find(card => card.id === 'about')}
+      />
+      <SkillsNew 
+        isActive={activeSectionModal === 'skills'} 
+        onClose={closeSectionModal}
+        cardTheme={sectionCards.find(card => card.id === 'skills')}
+      />
+      <ProjectsNew 
+        isActive={activeSectionModal === 'projects'} 
+        onClose={closeSectionModal}
+        cardTheme={sectionCards.find(card => card.id === 'projects')}
+      />
+      <ContactNew 
+        isActive={activeSectionModal === 'contact'} 
+        onClose={closeSectionModal}
+        cardTheme={sectionCards.find(card => card.id === 'contact')}
+      />
     </div>
   );
 };
