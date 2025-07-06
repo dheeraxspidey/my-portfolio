@@ -32,9 +32,7 @@ const CodingScene2D = ({
     "console.log('Ready to explore!');"
   ];
 
-  // Standardized card configurations - all cards start from same base position and size
-  const baseCardPosition = { x: 300, y: 150, width: 120, height: 45 };
-  
+  // Exact card positions in the 2D scene - each card has its specific location
   const sectionCards = [
     {
       id: 'about',
@@ -43,7 +41,7 @@ const CodingScene2D = ({
       description: 'Discover my story',
       color: '#3b82f6',
       bgColor: 'rgba(59, 130, 246, 0.3)',
-      position: { ...baseCardPosition, x: baseCardPosition.x + 120, y: baseCardPosition.y - 20 },
+      position: { x: 420, y: 130, width: 120, height: 45 },
       icon: '👨‍💻'
     },
     {
@@ -53,7 +51,7 @@ const CodingScene2D = ({
       description: 'React • Python • AI/ML',
       color: '#10b981',
       bgColor: 'rgba(16, 185, 129, 0.2)',
-      position: { ...baseCardPosition, x: baseCardPosition.x - 80, y: baseCardPosition.y - 50 },
+      position: { x: 100, y: 100, width: 120, height: 45 },
       icon: '⚡'
     },
     {
@@ -63,7 +61,7 @@ const CodingScene2D = ({
       description: 'Amazing creations',
       color: '#f59e0b',
       bgColor: 'rgba(245, 158, 11, 0.2)',
-      position: { ...baseCardPosition, x: baseCardPosition.x + 180, y: baseCardPosition.y + 100 },
+      position: { x: 480, y: 250, width: 120, height: 45 },
       icon: '🚀'
     },
     {
@@ -73,7 +71,7 @@ const CodingScene2D = ({
       description: 'Get in touch',
       color: '#a855f7',
       bgColor: 'rgba(168, 85, 247, 0.2)',
-      position: { ...baseCardPosition, x: baseCardPosition.x - 120, y: baseCardPosition.y + 100 },
+      position: { x: 90, y: 250, width: 120, height: 45 },
       icon: '📧'
     }
   ];
@@ -161,23 +159,23 @@ const CodingScene2D = ({
 
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`}>
-      {/* Enhanced Background with subtle patterns */}
+      {/* Professional Background with subtle patterns */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-        {/* Grid pattern overlay */}
+        {/* Sophisticated grid pattern overlay */}
         <div 
-          className="absolute inset-0 opacity-5"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(56, 189, 248, 0.1) 1px, transparent 1px)
+              linear-gradient(rgba(56, 189, 248, 0.4) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(56, 189, 248, 0.4) 1px, transparent 1px)
             `,
-            backgroundSize: '50px 50px'
+            backgroundSize: '40px 40px'
           }}
         />
         
-        {/* Animated background particles */}
+        {/* Ambient particles */}
         <div className="absolute inset-0">
-          {[...Array(25)].map((_, i) => (
+          {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-20"
@@ -186,12 +184,12 @@ const CodingScene2D = ({
                 top: `${Math.random() * 100}%`,
               }}
               animate={{
-                y: [0, -30, 0],
-                opacity: [0.2, 0.6, 0.2],
-                scale: [1, 1.5, 1]
+                y: [0, -25, 0],
+                opacity: [0.2, 0.5, 0.2],
+                scale: [1, 1.3, 1]
               }}
               transition={{
-                duration: 4 + Math.random() * 3,
+                duration: 5 + Math.random() * 3,
                 repeat: Infinity,
                 delay: Math.random() * 3,
                 ease: "easeInOut"
@@ -201,47 +199,56 @@ const CodingScene2D = ({
         </div>
       </div>
 
-      {/* Main Scene */}
+      {/* Professional Workspace Scene */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 800 400" className="w-full h-full" style={{ pointerEvents: 'auto' }}>
-          {/* Enhanced desk with gradient */}
+          {/* Enhanced gradients and filters */}
           <defs>
             <linearGradient id="deskGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#4a5568" />
+              <stop offset="50%" stopColor="#3a4553" />
               <stop offset="100%" stopColor="#2d3748" />
             </linearGradient>
             <linearGradient id="monitorGradient" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#1a1a1a" />
               <stop offset="100%" stopColor="#0a0a0a" />
             </linearGradient>
+            <radialGradient id="ambientGlow" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stopColor="rgba(56, 189, 248, 0.15)" />
+              <stop offset="70%" stopColor="rgba(56, 189, 248, 0.05)" />
+              <stop offset="100%" stopColor="transparent" />
+            </radialGradient>
+            <filter id="softShadow">
+              <feDropShadow dx="0" dy="4" stdDeviation="3" floodOpacity="0.3"/>
+            </filter>
           </defs>
           
-          {/* Desk surface with shadow */}
-          <ellipse cx="400" cy="320" rx="350" ry="8" fill="rgba(0,0,0,0.2)" />
-          <rect x="50" y="300" width="700" height="20" fill="url(#deskGradient)" rx="4" />
+          {/* Professional desk setup */}
+          <ellipse cx="400" cy="325" rx="360" ry="10" fill="rgba(0,0,0,0.15)" />
+          <rect x="50" y="300" width="700" height="25" fill="url(#deskGradient)" rx="6" filter="url(#softShadow)" />
           
-          {/* Desk legs */}
-          <rect x="80" y="320" width="15" height="80" fill="#2d3748" rx="2" />
-          <rect x="700" y="320" width="15" height="80" fill="#2d3748" rx="2" />
+          {/* Desk legs with better styling */}
+          <rect x="80" y="325" width="18" height="75" fill="#2d3748" rx="3" filter="url(#softShadow)" />
+          <rect x="700" y="325" width="18" height="75" fill="#2d3748" rx="3" filter="url(#softShadow)" />
           
-          {/* Enhanced chair */}
-          <rect x="320" y="280" width="80" height="60" fill="url(#deskGradient)" rx="8" />
-          <rect x="325" y="220" width="70" height="80" fill="url(#deskGradient)" rx="8" />
-          <rect x="340" y="340" width="10" height="60" fill="#2d3748" rx="2" />
-          <rect x="370" y="340" width="10" height="60" fill="#2d3748" rx="2" />
+          {/* Professional chair */}
+          <rect x="315" y="275" width="90" height="65" fill="url(#deskGradient)" rx="12" filter="url(#softShadow)" />
+          <rect x="320" y="215" width="80" height="85" fill="url(#deskGradient)" rx="12" filter="url(#softShadow)" />
+          <rect x="340" y="340" width="12" height="60" fill="#2d3748" rx="3" />
+          <rect x="368" y="340" width="12" height="60" fill="#2d3748" rx="3" />
           
-          {/* Enhanced character with better animations */}
+          {/* Enhanced character with professional animations */}
           <g transform="translate(350, 180)">
-            {/* Head with subtle glow */}
-            <circle cx="20" cy="20" r="18" fill="#fbbf24" filter="drop-shadow(0 0 3px rgba(251, 191, 36, 0.3))" />
+            {/* Head with subtle professional glow */}
+            <circle cx="20" cy="20" r="18" fill="#fbbf24" filter="drop-shadow(0 0 2px rgba(251, 191, 36, 0.2))" />
             
-            {/* Hair */}
-            <path d="M 5 10 Q 20 0 35 10 Q 35 5 30 5 Q 20 -2 10 5 Q 5 5 5 10" fill="#374151" />
+            {/* Professional hairstyle */}
+            <path d="M 5 10 Q 20 -2 35 10 Q 35 5 30 5 Q 20 -4 10 5 Q 5 5 5 10" fill="#374151" />
             
-            {/* Body */}
+            {/* Professional attire */}
             <rect x="8" y="35" width="24" height="40" fill="#3b82f6" rx="4" />
             
-            {/* Enhanced arms with better typing animation */}
+            {/* Refined typing animation */}
             <motion.rect 
               x="0" 
               y="40" 
@@ -250,10 +257,10 @@ const CodingScene2D = ({
               fill="#fbbf24" 
               rx="6"
               animate={isTyping ? { 
-                rotate: [0, -8, 0, 8, 0],
-                y: [40, 37, 40, 37, 40]
+                rotate: [0, -6, 0, 6, 0],
+                y: [40, 38, 40, 38, 40]
               } : {}}
-              transition={{ duration: 0.6, repeat: Infinity }}
+              transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.rect 
               x="28" 
@@ -263,10 +270,10 @@ const CodingScene2D = ({
               fill="#fbbf24" 
               rx="6"
               animate={isTyping ? { 
-                rotate: [0, 8, 0, -8, 0],
-                y: [40, 37, 40, 37, 40]
+                rotate: [0, 6, 0, -6, 0],
+                y: [40, 38, 40, 38, 40]
               } : {}}
-              transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
+              transition={{ duration: 0.8, repeat: Infinity, delay: 0.2, ease: "easeInOut" }}
             />
             
             {/* Hands */}
@@ -274,65 +281,70 @@ const CodingScene2D = ({
             <circle cx="34" cy="70" r="4" fill="#fbbf24" />
           </g>
           
-          {/* Enhanced monitor */}
-          <rect x="200" y="180" width="200" height="120" fill="url(#monitorGradient)" rx="8" />
-          <rect x="210" y="190" width="180" height="100" fill="#0f172a" rx="4" />
+          {/* Professional monitor setup */}
+          <rect x="195" y="175" width="210" height="130" fill="url(#monitorGradient)" rx="10" filter="url(#softShadow)" />
+          <rect x="205" y="185" width="190" height="110" fill="#0f172a" rx="6" />
           
           {/* Monitor stand */}
-          <rect x="285" y="300" width="30" height="15" fill="#4a5568" rx="2" />
-          <rect x="270" y="315" width="60" height="8" fill="#4a5568" rx="4" />
+          <rect x="285" y="305" width="35" height="18" fill="#4a5568" rx="3" />
+          <rect x="270" y="323" width="65" height="10" fill="#4a5568" rx="5" />
           
-          {/* Enhanced keyboard */}
-          <rect x="250" y="320" width="120" height="25" fill="#2d3748" rx="4" />
+          {/* Professional keyboard */}
+          <rect x="245" y="320" width="130" height="28" fill="#2d3748" rx="6" filter="url(#softShadow)" />
           {/* Keyboard keys */}
+          {[...Array(14)].map((_, i) => (
+            <rect key={i} x={250 + i * 8.5} y="324" width="7" height="6" fill="#4a5568" rx="1" />
+          ))}
           {[...Array(12)].map((_, i) => (
-            <rect key={i} x={255 + i * 9} y="323" width="7" height="6" fill="#4a5568" rx="1" />
+            <rect key={i} x={255 + i * 8.5} y="332" width="7" height="6" fill="#4a5568" rx="1" />
           ))}
           
-          {/* Mouse with subtle glow */}
-          <ellipse cx="390" cy="332" rx="8" ry="12" fill="#4a5568" filter="drop-shadow(0 0 2px rgba(74, 85, 104, 0.5))" />
+          {/* Professional mouse */}
+          <ellipse cx="395" cy="335" rx="10" ry="14" fill="#4a5568" filter="url(#softShadow)" />
           
           {/* Screen content */}
           <g clipPath="url(#screenClip)">
             <defs>
               <clipPath id="screenClip">
-                <rect x="210" y="190" width="180" height="100" rx="4" />
+                <rect x="205" y="185" width="190" height="110" rx="6" />
               </clipPath>
             </defs>
             
             {/* Terminal background */}
-            <rect x="210" y="190" width="180" height="100" fill="#1e293b" />
+            <rect x="205" y="185" width="190" height="110" fill="#1e293b" />
             
-            {/* Terminal header */}
-            <rect x="210" y="190" width="180" height="20" fill="#334155" />
-            <circle cx="220" cy="200" r="3" fill="#ef4444" />
-            <circle cx="230" cy="200" r="3" fill="#f59e0b" />
-            <circle cx="240" cy="200" r="3" fill="#10b981" />
+            {/* Professional terminal header */}
+            <rect x="205" y="185" width="190" height="22" fill="#334155" />
+            <circle cx="215" cy="196" r="3" fill="#ef4444" />
+            <circle cx="225" cy="196" r="3" fill="#f59e0b" />
+            <circle cx="235" cy="196" r="3" fill="#10b981" />
+            <text x="250" y="200" fill="#94a3b8" fontSize="8" fontFamily="monospace">terminal</text>
             
-            {/* Code lines with better syntax highlighting */}
+            {/* Enhanced code with professional syntax highlighting */}
             {codeLines.slice(0, currentLine + 1).map((line, index) => (
               <motion.text
                 key={index}
-                x="215"
-                y={220 + index * 12}
+                x="210"
+                y={218 + index * 11}
                 fill={
                   line.includes('Dheeraj') || line.includes('Welcome') ? '#4ade80' :
                   line.includes('const') || line.includes('console') ? '#60a5fa' :
                   line.includes("'") ? '#fbbf24' :
                   line.includes('//') ? '#94a3b8' :
+                  line.includes(':') ? '#f472b6' :
                   '#e2e8f0'
                 }
-                fontSize="8"
+                fontSize="7"
                 fontFamily="monospace"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: index * 0.1, ease: "easeOut" }}
               >
                 {line}
                 {index === currentLine && (
                   <motion.tspan
                     animate={{ opacity: [1, 0] }}
-                    transition={{ duration: 0.8, repeat: Infinity }}
+                    transition={{ duration: 1, repeat: Infinity }}
                   >
                     |
                   </motion.tspan>
@@ -341,28 +353,28 @@ const CodingScene2D = ({
             ))}
           </g>
           
-          {/* Floating cards with standardized positions */}
+          {/* Professional floating cards with exact positions */}
           <AnimatePresence>
             {showGreetingState && (
               <motion.g
                 initial={{ opacity: 0, y: 50, scale: 0.8 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -30, scale: 0.8 }}
-                transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
+                transition={{ delay: 0.5, duration: 1.2, ease: "easeOut" }}
               >
                 {sectionCards.map((card, index) => (
                   <motion.g
                     key={card.id}
                     animate={{ 
-                      y: [0, -6 - index * 1.5, 0],
-                      rotate: [0, index % 2 === 0 ? 1.5 : -1.5, 0],
-                      scale: activeSection === card.id || highlightCard === card.id ? [1, 1.1, 1] : 1
+                      y: [0, -4 - index * 1, 0],
+                      rotate: [0, index % 2 === 0 ? 1 : -1, 0],
+                      scale: activeSection === card.id || highlightCard === card.id ? [1, 1.08, 1] : 1
                     }}
                     transition={{ 
-                      duration: 4 + index * 0.5, 
+                      duration: 5 + index * 0.3, 
                       repeat: Infinity,
                       ease: "easeInOut",
-                      delay: index * 0.2
+                      delay: index * 0.15
                     }}
                     style={{ cursor: 'pointer', pointerEvents: 'all' }}
                     onMouseDown={(e) => {
@@ -370,57 +382,57 @@ const CodingScene2D = ({
                       handleCardClick(card.id);
                     }}
                   >
-                    {/* Enhanced card transition overlay effect */}
+                    {/* Professional card transition effects */}
                     <AnimatePresence>
                       {(cardTransition === card.id || highlightCard === card.id) && (
                         <>
-                          {/* Main transition circle */}
+                          {/* Main professional transition circle */}
                           <motion.circle
                             cx={card.position.x + card.position.width / 2}
                             cy={card.position.y + card.position.height / 2}
-                            r="10"
+                            r="8"
                             fill={card.color}
-                            initial={{ r: 10, opacity: 0.8 }}
+                            initial={{ r: 8, opacity: 0.9 }}
                             animate={{ 
-                              r: [10, 60, 200],
-                              opacity: [0.8, 0.4, 0]
+                              r: [8, 80, 250],
+                              opacity: [0.9, 0.5, 0]
                             }}
                             exit={{ opacity: 0 }}
-                            transition={{ duration: 2, ease: "easeOut" }}
+                            transition={{ duration: 2.5, ease: "easeOut" }}
                           />
                           
-                          {/* Multiple ripple effects */}
-                          {[...Array(3)].map((_, i) => (
+                          {/* Professional ripple effects */}
+                          {[...Array(4)].map((_, i) => (
                             <motion.circle
                               key={`ripple-${i}`}
                               cx={card.position.x + card.position.width / 2}
                               cy={card.position.y + card.position.height / 2}
-                              r="5"
+                              r="4"
                               fill="none"
                               stroke={card.color}
-                              strokeWidth="2"
-                              initial={{ r: 5, opacity: 1 }}
+                              strokeWidth="1.5"
+                              initial={{ r: 4, opacity: 1 }}
                               animate={{ 
-                                r: [5, 40 + i * 20, 100 + i * 30],
+                                r: [4, 50 + i * 15, 120 + i * 20],
                                 opacity: [1, 0.6, 0],
-                                strokeWidth: [2, 1, 0]
+                                strokeWidth: [1.5, 0.8, 0]
                               }}
                               exit={{ opacity: 0 }}
                               transition={{ 
-                                duration: 1.5, 
+                                duration: 2, 
                                 ease: "easeOut", 
-                                delay: i * 0.2 
+                                delay: i * 0.15 
                               }}
                             />
                           ))}
                           
-                          {/* Enhanced particle effects */}
-                          {[...Array(12)].map((_, i) => (
+                          {/* Professional particle burst */}
+                          {[...Array(16)].map((_, i) => (
                             <motion.circle
                               key={`particle-${i}`}
                               cx={card.position.x + card.position.width / 2}
                               cy={card.position.y + card.position.height / 2}
-                              r="2"
+                              r="1.5"
                               fill={card.color}
                               initial={{ 
                                 scale: 0,
@@ -429,14 +441,14 @@ const CodingScene2D = ({
                                 opacity: 1
                               }}
                               animate={{ 
-                                scale: [0, 1.5, 0],
-                                x: Math.cos(i * Math.PI / 6) * 60,
-                                y: Math.sin(i * Math.PI / 6) * 60,
-                                opacity: [1, 0.7, 0]
+                                scale: [0, 2, 0],
+                                x: Math.cos(i * Math.PI / 8) * 80,
+                                y: Math.sin(i * Math.PI / 8) * 80,
+                                opacity: [1, 0.8, 0]
                               }}
                               transition={{ 
-                                duration: 1.2,
-                                delay: 0.3,
+                                duration: 1.5,
+                                delay: 0.2,
                                 ease: "easeOut"
                               }}
                             />
@@ -445,7 +457,7 @@ const CodingScene2D = ({
                       )}
                     </AnimatePresence>
 
-                    {/* Main card with enhanced styling */}
+                    {/* Professional card design */}
                     <motion.rect 
                       x={card.position.x} 
                       y={card.position.y} 
@@ -453,68 +465,86 @@ const CodingScene2D = ({
                       height={card.position.height} 
                       fill={card.bgColor} 
                       stroke={card.color} 
-                      strokeWidth={activeSection === card.id || highlightCard === card.id ? "3" : "2"} 
+                      strokeWidth={activeSection === card.id || highlightCard === card.id ? "2.5" : "1.5"} 
                       rx="8"
-                      filter="drop-shadow(0 4px 8px rgba(0,0,0,0.2))"
+                      filter="drop-shadow(0 6px 12px rgba(0,0,0,0.25))"
                       animate={{
-                        strokeWidth: activeSection === card.id || highlightCard === card.id ? [2, 4, 2] : 2,
+                        strokeWidth: activeSection === card.id || highlightCard === card.id ? [1.5, 3, 1.5] : 1.5,
                         fill: activeSection === card.id || highlightCard === card.id ? 
                           [card.bgColor, card.color.replace(')', ', 0.4)').replace('rgb', 'rgba'), card.bgColor] : 
                           card.bgColor,
                         filter: highlightCard === card.id ? 
-                          `drop-shadow(0 0 15px ${card.color})` : 
-                          'drop-shadow(0 4px 8px rgba(0,0,0,0.2))'
+                          `drop-shadow(0 0 20px ${card.color})` : 
+                          'drop-shadow(0 6px 12px rgba(0,0,0,0.25))'
                       }}
-                      transition={{ duration: 0.5 }}
+                      transition={{ duration: 0.6, ease: "easeInOut" }}
                     />
                     
-                    {/* Card icon */}
+                    {/* Professional card icon */}
                     <text 
                       x={card.position.x + 12} 
-                      y={card.position.y + 18} 
-                      fontSize="14"
+                      y={card.position.y + 20} 
+                      fontSize="16"
                     >
                       {card.icon}
                     </text>
                     
-                    {/* Card title */}
+                    {/* Professional card title */}
                     <text 
-                      x={card.position.x + 30} 
-                      y={card.position.y + 16} 
+                      x={card.position.x + 32} 
+                      y={card.position.y + 18} 
                       fill={card.color} 
-                      fontSize="10" 
-                      fontWeight="bold"
+                      fontSize="11" 
+                      fontWeight="600"
+                      fontFamily="system-ui"
                     >
                       {card.title}
                     </text>
                     
-                    {/* Card subtitle */}
+                    {/* Professional card subtitle */}
                     <text 
-                      x={card.position.x + 30} 
-                      y={card.position.y + 28} 
-                      fill={card.color.replace(')', ', 0.8)').replace('rgb', 'rgba')} 
-                      fontSize="7"
+                      x={card.position.x + 32} 
+                      y={card.position.y + 32} 
+                      fill={card.color.replace(')', ', 0.85)').replace('rgb', 'rgba')} 
+                      fontSize="8"
+                      fontFamily="system-ui"
                     >
                       {card.subtitle}
                     </text>
 
-                    {/* Active section indicator */}
+                    {/* Professional active indicator */}
                     {(activeSection === card.id || highlightCard === card.id) && (
-                      <motion.circle
-                        cx={card.position.x + card.position.width - 8}
-                        cy={card.position.y + 8}
-                        r="3"
-                        fill={card.color}
-                        initial={{ scale: 0 }}
-                        animate={{ 
-                          scale: [0, 1.5, 1],
-                          opacity: [0, 1, 0.8]
-                        }}
-                        transition={{ duration: 0.5 }}
-                      />
+                      <>
+                        <motion.circle
+                          cx={card.position.x + card.position.width - 10}
+                          cy={card.position.y + 10}
+                          r="4"
+                          fill={card.color}
+                          initial={{ scale: 0 }}
+                          animate={{ 
+                            scale: [0, 1.3, 1],
+                            opacity: [0, 1, 0.9]
+                          }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                        />
+                        <motion.circle
+                          cx={card.position.x + card.position.width - 10}
+                          cy={card.position.y + 10}
+                          r="6"
+                          fill="none"
+                          stroke={card.color}
+                          strokeWidth="1"
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ 
+                            scale: [0, 1.5, 1.2],
+                            opacity: [0, 0.8, 0.4]
+                          }}
+                          transition={{ duration: 0.8, ease: "easeOut" }}
+                        />
+                      </>
                     )}
 
-                    {/* Enhanced hover effect */}
+                    {/* Professional hover effect */}
                     <motion.rect 
                       x={card.position.x} 
                       y={card.position.y} 
@@ -524,10 +554,10 @@ const CodingScene2D = ({
                       rx="8"
                       whileHover={{ 
                         stroke: card.color,
-                        strokeWidth: 3,
-                        filter: "drop-shadow(0 0 12px " + card.color + ")"
+                        strokeWidth: 2.5,
+                        filter: "drop-shadow(0 0 15px " + card.color + ")"
                       }}
-                      transition={{ duration: 0.2 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
                     />
                   </motion.g>
                 ))}
@@ -535,39 +565,34 @@ const CodingScene2D = ({
             )}
           </AnimatePresence>
           
-          {/* Enhanced floating code symbols */}
+          {/* Professional floating code symbols */}
           {['{ }', '< />', '( )', '[ ]', '=>', '&&', 'fn', 'AI'].map((symbol, index) => (
             <motion.text
               key={symbol}
-              x={80 + index * 90}
-              y={60 + Math.sin(index) * 15}
+              x={70 + index * 85}
+              y={50 + Math.sin(index) * 12}
               fill="#4ade80"
-              fontSize="12"
+              fontSize="11"
               fontFamily="monospace"
-              opacity="0.25"
+              opacity="0.2"
               animate={{
-                y: [60 + Math.sin(index) * 15, 40 + Math.sin(index) * 15, 60 + Math.sin(index) * 15],
-                opacity: [0.25, 0.5, 0.25],
-                rotate: [0, 3, -3, 0]
+                y: [50 + Math.sin(index) * 12, 35 + Math.sin(index) * 12, 50 + Math.sin(index) * 12],
+                opacity: [0.2, 0.4, 0.2],
+                rotate: [0, 2, -2, 0]
               }}
               transition={{
-                duration: 4 + index * 0.3,
+                duration: 6 + index * 0.2,
                 repeat: Infinity,
-                delay: index * 0.3
+                delay: index * 0.2,
+                ease: "easeInOut"
               }}
             >
               {symbol}
             </motion.text>
           ))}
 
-          {/* Ambient lighting effects */}
-          <defs>
-            <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(56, 189, 248, 0.1)" />
-              <stop offset="100%" stopColor="transparent" />
-            </radialGradient>
-          </defs>
-          <ellipse cx="300" cy="250" rx="150" ry="80" fill="url(#ambientGlow)" />
+          {/* Professional ambient lighting */}
+          <ellipse cx="300" cy="240" rx="180" ry="90" fill="url(#ambientGlow)" />
         </svg>
       </div>
 

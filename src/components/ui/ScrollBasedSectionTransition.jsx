@@ -15,9 +15,8 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
   const [showHeroScene, setShowHeroScene] = useState(true);
   const [transitionalCard, setTransitionalCard] = useState(null);
   const [lastScrollTime, setLastScrollTime] = useState(0);
-  const [cardStartPosition, setCardStartPosition] = useState(null);
   
-  // Checkpoint configuration - 5 main checkpoints
+  // Professional checkpoint configuration
   const checkpoints = [
     {
       id: 'home',
@@ -39,7 +38,9 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       modal: 'about',
       card: 'about',
       component: AboutNew,
-      icon: '👨‍💻'
+      icon: '👨‍💻',
+      // Exact position from 2D scene
+      scenePosition: { x: 420, y: 130, width: 120, height: 45 }
     },
     {
       id: 'skills',
@@ -53,7 +54,9 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       modal: 'skills',
       card: 'skills',
       component: SkillsNew,
-      icon: '⚡'
+      icon: '⚡',
+      // Exact position from 2D scene
+      scenePosition: { x: 100, y: 100, width: 120, height: 45 }
     },
     {
       id: 'projects',
@@ -67,7 +70,9 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       modal: 'projects',
       card: 'projects',
       component: ProjectsNew,
-      icon: '🚀'
+      icon: '🚀',
+      // Exact position from 2D scene
+      scenePosition: { x: 480, y: 250, width: 120, height: 45 }
     },
     {
       id: 'contact',
@@ -81,23 +86,13 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       modal: 'contact',
       card: 'contact',
       component: ContactNew,
-      icon: '📧'
+      icon: '📧',
+      // Exact position from 2D scene
+      scenePosition: { x: 90, y: 250, width: 120, height: 45 }
     }
   ];
 
-  // Calculate card start positions based on 2D scene layout
-  const getCardStartPosition = (cardId) => {
-    const basePosition = { x: 300, y: 150, width: 120, height: 45 };
-    const positions = {
-      'about': { ...basePosition, x: basePosition.x + 120, y: basePosition.y - 20 },
-      'skills': { ...basePosition, x: basePosition.x - 80, y: basePosition.y - 50 },
-      'projects': { ...basePosition, x: basePosition.x + 180, y: basePosition.y + 100 },
-      'contact': { ...basePosition, x: basePosition.x - 120, y: basePosition.y + 100 }
-    };
-    return positions[cardId] || basePosition;
-  };
-
-  // Smooth scroll to checkpoint
+  // Professional smooth scroll to checkpoint
   const scrollToCheckpoint = (checkpointIndex, smooth = true) => {
     if (isTransitioning) return;
     
@@ -113,14 +108,14 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       behavior: smooth ? 'smooth' : 'auto'
     });
 
-    // Update checkpoint after scroll animation
+    // Professional transition timing
     setTimeout(() => {
       setCurrentCheckpoint(checkpointIndex);
       setIsTransitioning(false);
-    }, smooth ? 800 : 100);
+    }, smooth ? 1000 : 100);
   };
 
-  // Enhanced scroll handler with checkpoint snapping
+  // Enhanced professional scroll handler
   useEffect(() => {
     let scrollTimeout;
     
@@ -133,8 +128,8 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       const now = Date.now();
       const timeSinceLastScroll = now - lastScrollTime;
       
-      // Throttle scroll events
-      if (timeSinceLastScroll < 50) return;
+      // Professional throttling
+      if (timeSinceLastScroll < 30) return;
       setLastScrollTime(now);
 
       const container = containerRef.current;
@@ -143,14 +138,12 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       const { scrollTop, scrollHeight, clientHeight } = container;
       const scrollProgress = scrollTop / (scrollHeight - clientHeight);
       
-      // Clear existing timeout
       clearTimeout(scrollTimeout);
       
-      // Set timeout to snap to nearest checkpoint after scroll stops
+      // Professional snap timing
       scrollTimeout = setTimeout(() => {
         if (isTransitioning) return;
         
-        // Find nearest checkpoint
         let nearestCheckpoint = 0;
         let minDistance = Math.abs(scrollProgress - checkpoints[0].progress);
         
@@ -162,14 +155,13 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
           }
         });
 
-        // Only snap if we're not already at the checkpoint
-        if (nearestCheckpoint !== currentCheckpoint && minDistance > 0.05) {
+        if (nearestCheckpoint !== currentCheckpoint && minDistance > 0.03) {
           scrollToCheckpoint(nearestCheckpoint, true);
         }
-      }, 150); // Snap after 150ms of no scrolling
+      }, 120);
     };
 
-    // Wheel event for better control
+    // Professional wheel handling
     const handleWheel = (e) => {
       if (isTransitioning) {
         e.preventDefault();
@@ -179,20 +171,18 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       e.preventDefault();
       
       const delta = e.deltaY;
-      const threshold = 50;
+      const threshold = 30;
       
       if (Math.abs(delta) > threshold) {
         if (delta > 0 && currentCheckpoint < checkpoints.length - 1) {
-          // Scroll down
           scrollToCheckpoint(currentCheckpoint + 1);
         } else if (delta < 0 && currentCheckpoint > 0) {
-          // Scroll up
           scrollToCheckpoint(currentCheckpoint - 1);
         }
       }
     };
 
-    // Keyboard navigation
+    // Professional keyboard navigation
     const handleKeyDown = (e) => {
       if (isTransitioning) return;
       
@@ -236,7 +226,7 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
     }
   }, [currentCheckpoint, isTransitioning, lastScrollTime]);
 
-  // Update UI based on current checkpoint
+  // Professional UI state management
   useEffect(() => {
     const checkpoint = checkpoints[currentCheckpoint];
     
@@ -245,34 +235,29 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
       setActiveModal(null);
       setShowHeroScene(true);
       setTransitionalCard(null);
-      setCardStartPosition(null);
     } else {
-      // Set card start position from 2D scene
-      const startPos = getCardStartPosition(checkpoint.id);
-      setCardStartPosition(startPos);
-      
-      // Transition sequence for sections
+      // Professional transition sequence
       setTransitionPhase('card-centering');
       setShowHeroScene(true);
       setTransitionalCard(checkpoint);
       setActiveModal(null);
       
-      // Card zoom phase
+      // Professional timing for card zoom
       setTimeout(() => {
         setTransitionPhase('card-zooming');
-      }, 800);
+      }, 1000);
       
-      // Show section content
+      // Professional timing for section reveal
       setTimeout(() => {
         setTransitionPhase('section-active');
         setShowHeroScene(false);
         setTransitionalCard(null);
         setActiveModal(checkpoint.modal);
-      }, 1600);
+      }, 2000);
     }
   }, [currentCheckpoint]);
 
-  // Handle card click from 2D scene
+  // Professional card transition handler
   const handleCardTransition = (sectionId) => {
     const targetIndex = checkpoints.findIndex(cp => cp.id === sectionId);
     if (targetIndex > 0) {
@@ -284,33 +269,32 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
 
   return (
     <div ref={containerRef} className={`relative w-full h-screen overflow-y-auto ${className}`}>
-      {/* Scroll content - creates scrollable height */}
+      {/* Professional scroll content */}
       <div className="h-[500vh]">
-        {/* Fixed positioned elements */}
         <div className="fixed inset-0 flex items-center justify-center">
           
-          {/* Enhanced dynamic background gradient */}
+          {/* Professional dynamic background */}
           <motion.div
             className="absolute inset-0"
             animate={{
               background: showHeroScene 
-                ? 'radial-gradient(circle at center, rgba(55, 65, 81, 0.3) 0%, rgba(17, 24, 39, 0.9) 70%)'
+                ? 'radial-gradient(circle at center, rgba(55, 65, 81, 0.2) 0%, rgba(17, 24, 39, 0.95) 70%)'
                 : currentCheckpointData?.bgColor 
-                  ? `radial-gradient(circle at center, ${currentCheckpointData.bgColor} 0%, rgba(17, 24, 39, 0.9) 70%)`
-                  : 'radial-gradient(circle at center, rgba(55, 65, 81, 0.3) 0%, rgba(17, 24, 39, 0.9) 70%)'
+                  ? `radial-gradient(circle at center, ${currentCheckpointData.bgColor} 0%, rgba(17, 24, 39, 0.95) 70%)`
+                  : 'radial-gradient(circle at center, rgba(55, 65, 81, 0.2) 0%, rgba(17, 24, 39, 0.95) 70%)'
             }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
           />
 
-          {/* Hero 2D Scene */}
+          {/* Professional Hero 2D Scene */}
           <AnimatePresence>
             {showHeroScene && (
               <motion.div
                 className="absolute inset-0 z-10"
-                initial={{ opacity: 0, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 1.05 }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
+                exit={{ opacity: 0, scale: 1.02 }}
+                transition={{ duration: 1, ease: "easeInOut" }}
               >
                 <CodingScene2D 
                   className="w-full h-full"
@@ -323,119 +307,119 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
             )}
           </AnimatePresence>
 
-          {/* Enhanced Transitional Card (moving from exact scene position to center) */}
+          {/* Professional Transitional Card with exact positioning */}
           <AnimatePresence>
-            {transitionalCard && cardStartPosition && (transitionPhase === 'card-centering' || transitionPhase === 'card-zooming') && (
+            {transitionalCard && transitionalCard.scenePosition && (transitionPhase === 'card-centering' || transitionPhase === 'card-zooming') && (
               <motion.div
                 className="z-30 relative"
                 initial={{ 
-                  scale: 0.15, // Start very small to match SVG scale
-                  x: (cardStartPosition.x - 400) * 0.8, // Convert SVG coordinates to screen coordinates
-                  y: (cardStartPosition.y - 300) * 0.8,
-                  opacity: 0.9
+                  scale: 0.12, // Exact scale to match SVG card size
+                  x: (transitionalCard.scenePosition.x - 400) * 0.75, // Precise coordinate conversion
+                  y: (transitionalCard.scenePosition.y - 300) * 0.75,
+                  opacity: 0.95
                 }}
                 animate={{
-                  scale: transitionPhase === 'card-centering' ? 1.2 : 
-                         transitionPhase === 'card-zooming' ? 6 : 1,
+                  scale: transitionPhase === 'card-centering' ? 1.5 : 
+                         transitionPhase === 'card-zooming' ? 8 : 1,
                   x: 0,
                   y: 0,
                   opacity: transitionPhase === 'card-zooming' ? 0 : 1,
                   rotateY: transitionPhase === 'card-zooming' ? [0, 180, 360] : 0,
-                  rotateX: transitionPhase === 'card-zooming' ? [0, 20, 0] : 0
+                  rotateX: transitionPhase === 'card-zooming' ? [0, 15, 0] : 0
                 }}
                 exit={{ scale: 0, opacity: 0 }}
                 transition={{ 
-                  duration: transitionPhase === 'card-zooming' ? 1 : 0.8,
+                  duration: transitionPhase === 'card-zooming' ? 1.2 : 1,
                   ease: transitionPhase === 'card-zooming' ? "easeIn" : "easeOut"
                 }}
               >
                 <div
-                  className="p-8 rounded-2xl backdrop-blur-sm border-2 min-w-[340px] text-center relative overflow-hidden"
+                  className="p-10 rounded-3xl backdrop-blur-lg border-2 min-w-[380px] text-center relative overflow-hidden"
                   style={{
                     backgroundColor: transitionalCard.bgColor,
                     borderColor: transitionalCard.color,
-                    boxShadow: `0 0 80px ${transitionalCard.color}50, inset 0 0 40px ${transitionalCard.color}20`
+                    boxShadow: `0 0 100px ${transitionalCard.color}60, inset 0 0 60px ${transitionalCard.color}25`
                   }}
                 >
-                  {/* Card icon */}
+                  {/* Professional card icon */}
                   <motion.div
-                    className="text-4xl mb-4"
+                    className="text-5xl mb-6"
                     animate={{
-                      scale: transitionPhase === 'card-zooming' ? [1, 1.5, 1] : 1,
+                      scale: transitionPhase === 'card-zooming' ? [1, 1.8, 1] : 1,
                       rotate: transitionPhase === 'card-zooming' ? [0, 360] : 0
                     }}
-                    transition={{ duration: 0.6, repeat: transitionPhase === 'card-zooming' ? Infinity : 0 }}
+                    transition={{ duration: 0.8, repeat: transitionPhase === 'card-zooming' ? Infinity : 0 }}
                   >
                     {transitionalCard.icon}
                   </motion.div>
 
-                  {/* Card content */}
+                  {/* Professional card content */}
                   <motion.h3 
-                    className="text-3xl font-bold mb-3"
+                    className="text-4xl font-bold mb-4"
                     style={{ color: transitionalCard.color }}
                     animate={{
-                      scale: transitionPhase === 'card-zooming' ? [1, 1.3, 1] : 1
+                      scale: transitionPhase === 'card-zooming' ? [1, 1.4, 1] : 1
                     }}
-                    transition={{ duration: 0.4, repeat: transitionPhase === 'card-zooming' ? Infinity : 0 }}
+                    transition={{ duration: 0.5, repeat: transitionPhase === 'card-zooming' ? Infinity : 0 }}
                   >
                     {transitionalCard.title}
                   </motion.h3>
                   <p 
-                    className="text-xl opacity-90 mb-4"
+                    className="text-2xl opacity-90 mb-5"
                     style={{ color: transitionalCard.color }}
                   >
                     {transitionalCard.subtitle}
                   </p>
-                  <p className="text-gray-300 text-lg">
+                  <p className="text-gray-300 text-lg leading-relaxed">
                     {transitionalCard.description}
                   </p>
 
-                  {/* Enhanced zooming effect particles */}
+                  {/* Professional zooming particles */}
                   {transitionPhase === 'card-zooming' && (
                     <div className="absolute inset-0 pointer-events-none">
-                      {[...Array(24)].map((_, i) => (
+                      {[...Array(32)].map((_, i) => (
                         <motion.div
                           key={i}
-                          className="absolute w-4 h-4 rounded-full"
+                          className="absolute w-6 h-6 rounded-full"
                           style={{
                             backgroundColor: transitionalCard.color,
                             left: '50%',
                             top: '50%'
                           }}
                           animate={{
-                            x: Math.cos(i * Math.PI / 12) * 250,
-                            y: Math.sin(i * Math.PI / 12) * 250,
-                            scale: [0, 2, 0],
-                            opacity: [1, 0.8, 0]
+                            x: Math.cos(i * Math.PI / 16) * 300,
+                            y: Math.sin(i * Math.PI / 16) * 300,
+                            scale: [0, 3, 0],
+                            opacity: [1, 0.9, 0]
                           }}
                           transition={{
-                            duration: 1,
+                            duration: 1.2,
                             repeat: Infinity,
                             ease: "easeOut",
-                            delay: i * 0.02
+                            delay: i * 0.015
                           }}
                         />
                       ))}
                     </div>
                   )}
 
-                  {/* Enhanced ripple effect for centering */}
+                  {/* Professional ripple effects */}
                   {transitionPhase === 'card-centering' && (
                     <>
-                      {[...Array(4)].map((_, i) => (
+                      {[...Array(5)].map((_, i) => (
                         <motion.div
                           key={`ripple-${i}`}
-                          className="absolute inset-0 rounded-2xl border-2"
+                          className="absolute inset-0 rounded-3xl border-2"
                           style={{ borderColor: transitionalCard.color }}
                           animate={{
-                            scale: [1, 2 + i * 0.5, 4 + i],
-                            opacity: [0.8, 0.4, 0]
+                            scale: [1, 2.5 + i * 0.8, 5 + i * 1.2],
+                            opacity: [0.9, 0.5, 0]
                           }}
                           transition={{
-                            duration: 1.5,
+                            duration: 2,
                             repeat: Infinity,
                             ease: "easeOut",
-                            delay: i * 0.2
+                            delay: i * 0.25
                           }}
                         />
                       ))}
@@ -446,49 +430,53 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
             )}
           </AnimatePresence>
 
-          {/* Enhanced Checkpoint Navigation */}
+          {/* Professional Checkpoint Navigation */}
           <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40">
-            <div className="flex flex-col space-y-6">
+            <div className="flex flex-col space-y-8">
               {checkpoints.map((checkpoint, index) => (
                 <motion.button
                   key={checkpoint.id}
-                  className="w-5 h-5 rounded-full border-2 transition-all relative group"
+                  className="w-6 h-6 rounded-full border-2 transition-all relative group"
                   style={{
                     backgroundColor: index === currentCheckpoint 
                       ? checkpoint.color || '#3b82f6'
                       : 'transparent',
                     borderColor: checkpoint.color || '#3b82f6',
                     boxShadow: index === currentCheckpoint 
-                      ? `0 0 15px ${checkpoint.color || '#3b82f6'}50`
+                      ? `0 0 20px ${checkpoint.color || '#3b82f6'}60`
                       : 'none'
                   }}
                   onClick={() => scrollToCheckpoint(index)}
                   disabled={isTransitioning}
-                  whileHover={{ scale: 1.4 }}
+                  whileHover={{ scale: 1.5 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  {/* Enhanced Tooltip */}
-                  <div className="absolute right-8 top-1/2 transform -translate-y-1/2 bg-black/90 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm border border-gray-700">
-                    <div className="flex items-center space-x-2">
-                      {checkpoint.icon && <span>{checkpoint.icon}</span>}
-                      <span>{checkpoint.title || checkpoint.id}</span>
+                  {/* Professional Tooltip */}
+                  <div className="absolute right-10 top-1/2 transform -translate-y-1/2 bg-black/95 text-white px-4 py-3 rounded-xl text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-lg border border-gray-700/50">
+                    <div className="flex items-center space-x-3">
+                      {checkpoint.icon && <span className="text-lg">{checkpoint.icon}</span>}
+                      <div>
+                        <div className="font-semibold">{checkpoint.title || checkpoint.id}</div>
+                        {checkpoint.subtitle && (
+                          <div className="text-xs opacity-75">{checkpoint.subtitle}</div>
+                        )}
+                      </div>
                     </div>
-                    {/* Tooltip arrow */}
-                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-l-black/90"></div>
+                    <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-6 border-transparent border-l-black/95"></div>
                   </div>
                   
-                  {/* Enhanced Active indicator */}
+                  {/* Professional Active indicators */}
                   {index === currentCheckpoint && (
                     <>
                       <motion.div
                         className="absolute inset-0 rounded-full border-2"
                         style={{ borderColor: checkpoint.color || '#3b82f6' }}
                         animate={{
-                          scale: [1, 2.2, 1],
-                          opacity: [0.8, 0.2, 0.8]
+                          scale: [1, 2.8, 1],
+                          opacity: [0.9, 0.3, 0.9]
                         }}
                         transition={{
-                          duration: 2.5,
+                          duration: 3,
                           repeat: Infinity,
                           ease: "easeInOut"
                         }}
@@ -497,11 +485,11 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
                         className="absolute inset-0 rounded-full"
                         style={{ backgroundColor: checkpoint.color || '#3b82f6' }}
                         animate={{
-                          scale: [0.8, 1.1, 0.8],
-                          opacity: [0.6, 0.9, 0.6]
+                          scale: [0.7, 1.2, 0.7],
+                          opacity: [0.7, 1, 0.7]
                         }}
                         transition={{
-                          duration: 1.8,
+                          duration: 2,
                           repeat: Infinity,
                           ease: "easeInOut"
                         }}
@@ -513,9 +501,9 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
             </div>
           </div>
 
-          {/* Enhanced Progress Bar */}
+          {/* Professional Progress Bar */}
           <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40">
-            <div className="w-80 h-3 bg-gray-800/60 rounded-full overflow-hidden backdrop-blur-sm border border-gray-700/50">
+            <div className="w-96 h-4 bg-gray-800/70 rounded-full overflow-hidden backdrop-blur-lg border border-gray-700/60">
               <motion.div
                 className="h-full rounded-full relative"
                 style={{
@@ -524,82 +512,82 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
                 animate={{
                   width: `${(currentCheckpoint / (checkpoints.length - 1)) * 100}%`
                 }}
-                transition={{ duration: 0.8, ease: "easeInOut" }}
+                transition={{ duration: 1, ease: "easeInOut" }}
               >
-                {/* Progress glow effect */}
+                {/* Professional progress glow */}
                 <motion.div
                   className="absolute inset-0 rounded-full"
                   style={{
-                    background: `linear-gradient(90deg, transparent, ${currentCheckpointData?.color || '#3b82f6'}80, transparent)`
+                    background: `linear-gradient(90deg, transparent, ${currentCheckpointData?.color || '#3b82f6'}90, transparent)`
                   }}
                   animate={{
                     x: ['-100%', '100%']
                   }}
                   transition={{
-                    duration: 2,
+                    duration: 2.5,
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
                 />
               </motion.div>
             </div>
-            <div className="text-center mt-3 text-sm text-gray-400 font-medium">
-              <span style={{ color: currentCheckpointData?.color || '#3b82f6' }}>
+            <div className="text-center mt-4 text-sm text-gray-400 font-medium">
+              <span style={{ color: currentCheckpointData?.color || '#3b82f6' }} className="text-lg font-bold">
                 {currentCheckpoint + 1}
               </span>
-              <span className="mx-2">/</span>
-              <span>{checkpoints.length}</span>
-              <div className="text-xs mt-1 opacity-75">
+              <span className="mx-3 text-gray-500">/</span>
+              <span className="text-gray-300">{checkpoints.length}</span>
+              <div className="text-sm mt-2 font-semibold" style={{ color: currentCheckpointData?.color || '#3b82f6' }}>
                 {currentCheckpointData?.title || 'Home'}
               </div>
             </div>
           </div>
 
-          {/* Enhanced Scroll Hint (only on home) */}
+          {/* Professional Scroll Hint */}
           {currentCheckpoint === 0 && !isTransitioning && (
             <motion.div
-              className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-30"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
+              className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-30"
+              animate={{ y: [0, 15, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
             >
               <div className="text-center text-gray-400">
-                <div className="w-8 h-12 border-2 border-gray-400 rounded-full mx-auto mb-3 relative">
+                <div className="w-10 h-14 border-2 border-gray-400 rounded-full mx-auto mb-4 relative">
                   <motion.div
-                    className="w-2 h-4 bg-gray-400 rounded-full mx-auto mt-2"
-                    animate={{ y: [0, 16, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    className="w-3 h-5 bg-gray-400 rounded-full mx-auto mt-3"
+                    animate={{ y: [0, 20, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity }}
                   />
                 </div>
-                <p className="text-sm font-medium">Scroll to explore</p>
-                <p className="text-xs opacity-75 mt-1">Use mouse wheel or arrow keys</p>
+                <p className="text-base font-medium">Scroll to explore</p>
+                <p className="text-sm opacity-75 mt-2">Use mouse wheel, arrow keys, or navigation dots</p>
               </div>
             </motion.div>
           )}
 
-          {/* Transition loading indicator */}
+          {/* Professional transition indicator */}
           {isTransitioning && (
             <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-40">
-              <div className="flex items-center space-x-3 bg-black/80 px-4 py-2 rounded-full backdrop-blur-sm">
+              <div className="flex items-center space-x-4 bg-black/90 px-6 py-3 rounded-full backdrop-blur-lg border border-gray-700/50">
                 <motion.div
-                  className="w-4 h-4 rounded-full"
+                  className="w-5 h-5 rounded-full"
                   style={{ backgroundColor: currentCheckpointData?.color || '#3b82f6' }}
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 0.6, repeat: Infinity }}
+                  animate={{ scale: [1, 1.3, 1] }}
+                  transition={{ duration: 0.8, repeat: Infinity }}
                 />
-                <span className="text-sm text-gray-300">Transitioning...</span>
+                <span className="text-base text-gray-200 font-medium">Transitioning...</span>
               </div>
             </div>
           )}
         </div>
 
-        {/* Section Modals */}
+        {/* Professional Section Modals */}
         {checkpoints.slice(1).map((checkpoint) => {
           const SectionComponent = checkpoint.component;
           return (
             <div key={checkpoint.id} className="fixed inset-0 z-50">
               <SectionComponent
                 isActive={activeModal === checkpoint.modal}
-                onClose={() => {}} // Controlled by checkpoints, not close button
+                onClose={() => {}}
                 cardTheme={checkpoint}
                 scrollControlled={true}
               />
