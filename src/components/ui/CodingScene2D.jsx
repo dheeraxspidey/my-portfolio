@@ -5,10 +5,16 @@ import SkillsNew from '../sections/SkillsNew';
 import ProjectsNew from '../sections/ProjectsNew';
 import ContactNew from '../sections/ContactNew';
 
-const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onSectionTransition }) => {
+const CodingScene2D = ({ 
+  className = "", 
+  activeSection: parentActiveSection, 
+  onSectionTransition,
+  showGreeting = true,
+  highlightCard = null
+}) => {
   const [currentLine, setCurrentLine] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
-  const [showGreeting, setShowGreeting] = useState(false);
+  const [showGreetingState, setShowGreetingState] = useState(false);
   const [activeSection, setActiveSection] = useState(parentActiveSection || 'home');
   const [cardTransition, setCardTransition] = useState(null);
   const [activeSectionModal, setActiveSectionModal] = useState(null);
@@ -83,12 +89,15 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
   }, []);
 
   useEffect(() => {
-    const greetingTimer = setTimeout(() => {
-      setShowGreeting(true);
-    }, 3000);
-
-    return () => clearTimeout(greetingTimer);
-  }, []);
+    if (showGreeting) {
+      const greetingTimer = setTimeout(() => {
+        setShowGreetingState(true);
+      }, 1000);
+      return () => clearTimeout(greetingTimer);
+    } else {
+      setShowGreetingState(false);
+    }
+  }, [showGreeting]);
 
   // Update activeSection when parent changes
   useEffect(() => {
@@ -107,50 +116,22 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
     return () => window.removeEventListener('openAboutModal', handleOpenAboutModal);
   }, []);
 
-  // Handle scroll-based section detection and card transitions
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['home', 'about', 'skills', 'projects', 'contact']; // Added 'about' back for navigation
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            if (activeSection !== section) {
-              setActiveSection(section);
-              
-              // Trigger card transition effect (but not for invisible about marker)
-              if (section !== 'home' && section !== 'about') {
-                setCardTransition(section);
-                setTimeout(() => setCardTransition(null), 1000);
-              }
-            }
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeSection]);
-
   // Handle card click navigation
   const handleCardClick = (sectionId) => {
-    if (activeSectionModal === sectionId) return; // Prevent double clicks
+    if (activeSectionModal === sectionId) return;
     
     setCardTransition(sectionId);
     
-    // Trigger the zoom transition effect
-    setTimeout(() => {
-      setActiveSectionModal(sectionId);
-    }, 500);
-    
-    // Optional: Call parent callback for any additional handling
+    // Call parent callback for transition handling
     if (onSectionTransition) {
       onSectionTransition(sectionId);
+    }
+    
+    // For standalone usage (classic view), show modal
+    if (!onSectionTransition) {
+      setTimeout(() => {
+        setActiveSectionModal(sectionId);
+      }, 500);
     }
   };
 
@@ -324,7 +305,7 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
           
           {/* Floating cards around the character */}
           <AnimatePresence>
-            {showGreeting && (
+            {showGreetingState && (
               <motion.g
                 initial={{ opacity: 0, y: 50, scale: 0.8 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -337,7 +318,7 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
                     animate={{ 
                       y: [0, -8 - index * 2, 0],
                       rotate: [0, index % 2 === 0 ? 2 : -2, 0],
-                      scale: activeSection === card.id ? [1, 1.1, 1] : 1
+                      scale: activeSection === card.id || highlightCard === card.id ? [1, 1.15, 1] : 1
                     }}
                     transition={{ 
                       duration: 3.5 + index * 0.5, 
@@ -353,7 +334,7 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
                   >
                     {/* Enhanced card transition overlay effect */}
                     <AnimatePresence>
-                      {cardTransition === card.id && (
+                      {(cardTransition === card.id || highlightCard === card.id) && (
                         <>
                           {/* Main transition circle */}
                           <motion.circle
@@ -363,11 +344,11 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
                             fill={card.color}
                             initial={{ r: 10, opacity: 0.8 }}
                             animate={{ 
-                              r: [10, 200, 800],
+                              r: [10, 50, 150],
                               opacity: [0.8, 0.4, 0]
                             }}
                             exit={{ opacity: 0 }}
-                            transition={{ duration: 1.2, ease: "easeOut" }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
                           />
                           
                           {/* Secondary ripple effect */}
@@ -380,12 +361,12 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
                             strokeWidth="2"
                             initial={{ r: 5, opacity: 1 }}
                             animate={{ 
-                              r: [5, 100, 400],
+                              r: [5, 30, 80],
                               opacity: [1, 0.6, 0],
                               strokeWidth: [2, 1, 0]
                             }}
                             exit={{ opacity: 0 }}
-                            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+                            transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
                           />
                           
                           {/* Particle effects */}
@@ -427,13 +408,16 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
                       height={card.position.height} 
                       fill={card.bgColor} 
                       stroke={card.color} 
-                      strokeWidth={activeSection === card.id ? "3" : "2"} 
+                      strokeWidth={activeSection === card.id || highlightCard === card.id ? "3" : "2"} 
                       rx="10"
                       animate={{
-                        strokeWidth: activeSection === card.id ? [2, 3, 2] : 2,
-                        fill: activeSection === card.id ? 
+                        strokeWidth: activeSection === card.id || highlightCard === card.id ? [2, 4, 2] : 2,
+                        fill: activeSection === card.id || highlightCard === card.id ? 
                           [card.bgColor, card.color.replace(')', ', 0.5)').replace('rgb', 'rgba'), card.bgColor] : 
-                          card.bgColor
+                          card.bgColor,
+                        filter: highlightCard === card.id ? 
+                          `drop-shadow(0 0 15px ${card.color})` : 
+                          'none'
                       }}
                       transition={{ duration: 0.5 }}
                     />
@@ -471,7 +455,7 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
                     )}
 
                     {/* Active section indicator */}
-                    {activeSection === card.id && (
+                    {(activeSection === card.id || highlightCard === card.id) && (
                       <motion.circle
                         cx={card.position.x + card.position.width - 10}
                         cy={card.position.y + 10}
@@ -531,27 +515,31 @@ const CodingScene2D = ({ className = "", activeSection: parentActiveSection, onS
         </svg>
       </div>
 
-      {/* Section Modals */}
-      <AboutNew 
-        isActive={activeSectionModal === 'about'} 
-        onClose={closeSectionModal}
-        cardTheme={sectionCards.find(card => card.id === 'about')}
-      />
-      <SkillsNew 
-        isActive={activeSectionModal === 'skills'} 
-        onClose={closeSectionModal}
-        cardTheme={sectionCards.find(card => card.id === 'skills')}
-      />
-      <ProjectsNew 
-        isActive={activeSectionModal === 'projects'} 
-        onClose={closeSectionModal}
-        cardTheme={sectionCards.find(card => card.id === 'projects')}
-      />
-      <ContactNew 
-        isActive={activeSectionModal === 'contact'} 
-        onClose={closeSectionModal}
-        cardTheme={sectionCards.find(card => card.id === 'contact')}
-      />
+      {/* Section Modals (for standalone usage) */}
+      {!onSectionTransition && (
+        <>
+          <AboutNew 
+            isActive={activeSectionModal === 'about'} 
+            onClose={closeSectionModal}
+            cardTheme={sectionCards.find(card => card.id === 'about')}
+          />
+          <SkillsNew 
+            isActive={activeSectionModal === 'skills'} 
+            onClose={closeSectionModal}
+            cardTheme={sectionCards.find(card => card.id === 'skills')}
+          />
+          <ProjectsNew 
+            isActive={activeSectionModal === 'projects'} 
+            onClose={closeSectionModal}
+            cardTheme={sectionCards.find(card => card.id === 'projects')}
+          />
+          <ContactNew 
+            isActive={activeSectionModal === 'contact'} 
+            onClose={closeSectionModal}
+            cardTheme={sectionCards.find(card => card.id === 'contact')}
+          />
+        </>
+      )}
     </div>
   );
 };
