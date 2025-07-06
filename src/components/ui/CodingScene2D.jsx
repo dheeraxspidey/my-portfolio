@@ -29,7 +29,7 @@ const CodingScene2D = ({
     "  dreams: 'Building the future'",
     "};",
     "",
-    "console.log('Explore my journey!');"
+    "console.log('Ready to explore!');"
   ];
 
   // Section card configurations
