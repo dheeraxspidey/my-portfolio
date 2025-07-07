@@ -74,6 +74,7 @@ const ProjectsNew = ({ isActive, onClose, cardTheme, scrollControlled = false })
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        style={{ pointerEvents: 'auto' }}
       >
         {/* Backdrop */}
         <motion.div
@@ -87,12 +88,13 @@ const ProjectsNew = ({ isActive, onClose, cardTheme, scrollControlled = false })
           onClick={scrollControlled ? undefined : onClose}
         />
 
-        {/* Card Container */}
+        {/* Card Container with proper scrolling */}
         <motion.div
           className="relative w-full max-w-6xl mx-4 h-[85vh] rounded-2xl overflow-hidden"
           style={{
             background: cardTheme?.bgColor || 'rgba(245, 158, 11, 0.2)',
             border: `2px solid ${cardTheme?.color || '#f59e0b'}`,
+            pointerEvents: 'auto'
           }}
           initial={{ scale: 0, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -106,7 +108,7 @@ const ProjectsNew = ({ isActive, onClose, cardTheme, scrollControlled = false })
         >
           {/* Header */}
           <motion.div
-            className="relative p-6 border-b"
+            className="relative p-6 border-b flex-shrink-0"
             style={{ borderColor: cardTheme?.color || '#f59e0b' }}
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -133,8 +135,14 @@ const ProjectsNew = ({ isActive, onClose, cardTheme, scrollControlled = false })
             </p>
           </motion.div>
 
-          {/* Content */}
-          <div className="p-6 h-full overflow-y-auto">
+          {/* Scrollable Content */}
+          <div 
+            className="flex-1 overflow-y-auto p-6"
+            style={{ 
+              maxHeight: 'calc(85vh - 120px)',
+              scrollBehavior: 'smooth'
+            }}
+          >
             {/* Project Navigation */}
             <div className="flex justify-center gap-2 mb-6">
               {projectsData.map((_, index) => (
@@ -163,7 +171,7 @@ const ProjectsNew = ({ isActive, onClose, cardTheme, scrollControlled = false })
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -50 }}
                   transition={{ duration: 0.6 }}
-                  className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full"
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-8"
                 >
                   {/* Project Image */}
                   <motion.div
@@ -320,6 +328,60 @@ const ProjectsNew = ({ isActive, onClose, cardTheme, scrollControlled = false })
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Additional Projects List */}
+            <motion.div
+              className="mt-12 space-y-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+            >
+              <h4 
+                className="text-xl font-bold mb-6"
+                style={{ color: cardTheme?.color || '#f59e0b' }}
+              >
+                🚀 More Projects
+              </h4>
+              
+              {projectsData.map((project, index) => (
+                <motion.div
+                  key={project.id}
+                  className="p-4 rounded-lg backdrop-blur-sm border cursor-pointer transition-all hover:scale-[1.02]"
+                  style={{
+                    backgroundColor: `${cardTheme?.color || '#f59e0b'}10`,
+                    borderColor: cardTheme?.color || '#f59e0b'
+                  }}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 1.4 + index * 0.1 }}
+                  onClick={() => setCurrentProject(index)}
+                  whileHover={{
+                    backgroundColor: `${cardTheme?.color || '#f59e0b'}20`
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h5 
+                        className="font-semibold"
+                        style={{ color: cardTheme?.color || '#f59e0b' }}
+                      >
+                        {project.title}
+                      </h5>
+                      <p className="text-sm text-gray-300 mt-1">{project.subtitle}</p>
+                    </div>
+                    <div 
+                      className="px-2 py-1 rounded text-xs"
+                      style={{
+                        backgroundColor: project.status === 'Completed' ? '#10b981' : '#f59e0b',
+                        color: 'white'
+                      }}
+                    >
+                      {project.status}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </motion.div>
       </motion.div>

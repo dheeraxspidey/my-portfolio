@@ -81,6 +81,7 @@ const ContactNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        style={{ pointerEvents: 'auto' }}
       >
         {/* Backdrop */}
         <motion.div
@@ -94,12 +95,13 @@ const ContactNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) 
           onClick={scrollControlled ? undefined : onClose}
         />
 
-        {/* Card Container */}
+        {/* Card Container with proper scrolling */}
         <motion.div
           className="relative w-full max-w-5xl mx-4 h-[85vh] rounded-2xl overflow-hidden"
           style={{
             background: cardTheme?.bgColor || 'rgba(168, 85, 247, 0.2)',
             border: `2px solid ${cardTheme?.color || '#a855f7'}`,
+            pointerEvents: 'auto'
           }}
           initial={{ scale: 0, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -113,7 +115,7 @@ const ContactNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) 
         >
           {/* Header */}
           <motion.div
-            className="relative p-6 border-b"
+            className="relative p-6 border-b flex-shrink-0"
             style={{ borderColor: cardTheme?.color || '#a855f7' }}
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -140,12 +142,18 @@ const ContactNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) 
             </p>
           </motion.div>
 
-          {/* Content */}
-          <div className="p-6 h-full overflow-y-auto">
+          {/* Scrollable Content */}
+          <div 
+            className="flex-1 overflow-y-auto p-6"
+            style={{ 
+              maxHeight: 'calc(85vh - 120px)',
+              scrollBehavior: 'smooth'
+            }}
+          >
             <AnimatePresence>
               {showContent && (
                 <motion.div
-                  className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full"
+                  className="grid grid-cols-1 lg:grid-cols-2 gap-8"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
@@ -342,6 +350,37 @@ const ContactNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) 
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Additional Contact Information */}
+            <motion.div
+              className="mt-12 p-6 rounded-xl backdrop-blur-sm border"
+              style={{
+                backgroundColor: `${cardTheme?.color || '#a855f7'}10`,
+                borderColor: cardTheme?.color || '#a855f7'
+              }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 0.8 }}
+            >
+              <h4 
+                className="text-lg font-bold mb-4"
+                style={{ color: cardTheme?.color || '#a855f7' }}
+              >
+                📍 Let's Meet
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-300">
+                <div>
+                  <h5 className="font-semibold text-white mb-2">Location</h5>
+                  <p className="text-sm">Kompally, Hyderabad, India</p>
+                  <p className="text-sm opacity-75">Available for remote work worldwide</p>
+                </div>
+                <div>
+                  <h5 className="font-semibold text-white mb-2">Response Time</h5>
+                  <p className="text-sm">Usually within 24 hours</p>
+                  <p className="text-sm opacity-75">Faster response during business hours (IST)</p>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </motion.div>

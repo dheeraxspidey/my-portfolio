@@ -82,6 +82,7 @@ const SkillsNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        style={{ pointerEvents: 'auto' }}
       >
         {/* Backdrop */}
         <motion.div
@@ -95,12 +96,13 @@ const SkillsNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =
           onClick={scrollControlled ? undefined : onClose}
         />
 
-        {/* Card Container */}
+        {/* Card Container with proper scrolling */}
         <motion.div
           className="relative w-full max-w-5xl mx-4 h-[80vh] rounded-2xl overflow-hidden"
           style={{
             background: cardTheme?.bgColor || 'rgba(16, 185, 129, 0.2)',
             border: `2px solid ${cardTheme?.color || '#10b981'}`,
+            pointerEvents: 'auto'
           }}
           initial={{ scale: 0, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -114,7 +116,7 @@ const SkillsNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =
         >
           {/* Header */}
           <motion.div
-            className="relative p-6 border-b"
+            className="relative p-6 border-b flex-shrink-0"
             style={{ borderColor: cardTheme?.color || '#10b981' }}
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -141,8 +143,14 @@ const SkillsNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =
             </p>
           </motion.div>
 
-          {/* Content */}
-          <div className="p-6 h-full overflow-y-auto">
+          {/* Scrollable Content */}
+          <div 
+            className="flex-1 overflow-y-auto p-6"
+            style={{ 
+              maxHeight: 'calc(80vh - 120px)',
+              scrollBehavior: 'smooth'
+            }}
+          >
             {/* Category Navigation */}
             <div className="flex flex-wrap gap-2 mb-6">
               {categories.map((categoryKey, index) => {
@@ -262,6 +270,43 @@ const SkillsNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =
                 </div>
               </motion.div>
             )}
+
+            {/* Certifications Section */}
+            <motion.div
+              className="mt-8 p-6 rounded-xl backdrop-blur-sm border"
+              style={{
+                backgroundColor: `${cardTheme?.color || '#10b981'}10`,
+                borderColor: cardTheme?.color || '#10b981'
+              }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+            >
+              <h4 
+                className="text-lg font-bold mb-4"
+                style={{ color: cardTheme?.color || '#10b981' }}
+              >
+                🏆 Certifications & Achievements
+              </h4>
+              <div className="space-y-3 text-gray-300">
+                <div className="flex items-center space-x-3">
+                  <span className="text-yellow-500">🥇</span>
+                  <span>Machine Learning Specialization – Coursera</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-blue-500">🎓</span>
+                  <span>Infosys Springboard AI Primer & Gen AI</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-green-500">☁️</span>
+                  <span>Google Cloud Data Analytics</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <span className="text-purple-500">💎</span>
+                  <span>Smart Interviews: Diamond Certified (Rank 1247/37015)</span>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </motion.div>
       </motion.div>

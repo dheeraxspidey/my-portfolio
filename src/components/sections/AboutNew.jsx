@@ -58,6 +58,7 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        style={{ pointerEvents: 'auto' }}
       >
         {/* Backdrop */}
         <motion.div
@@ -71,12 +72,13 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
           onClick={scrollControlled ? undefined : onClose}
         />
 
-        {/* Card Container */}
+        {/* Card Container with proper scrolling */}
         <motion.div
           className="relative w-full max-w-4xl mx-4 h-[80vh] rounded-2xl overflow-hidden"
           style={{
             background: cardTheme?.bgColor || 'rgba(59, 130, 246, 0.3)',
             border: `2px solid ${cardTheme?.color || '#3b82f6'}`,
+            pointerEvents: 'auto'
           }}
           initial={{ scale: 0, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
@@ -90,7 +92,7 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
         >
           {/* Header */}
           <motion.div
-            className="relative p-6 border-b"
+            className="relative p-6 border-b flex-shrink-0"
             style={{ borderColor: cardTheme?.color || '#3b82f6' }}
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -117,12 +119,18 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
             </p>
           </motion.div>
 
-          {/* Content */}
-          <div className="p-6 h-full overflow-y-auto">
+          {/* Scrollable Content */}
+          <div 
+            className="flex-1 overflow-y-auto p-6"
+            style={{ 
+              maxHeight: 'calc(80vh - 120px)',
+              scrollBehavior: 'smooth'
+            }}
+          >
             <AnimatePresence mode="wait">
               {showContent && (
                 <motion.div
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 h-full"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-6"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
@@ -164,7 +172,6 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
                             borderWidth: isCurrentStep ? '2px' : '1px'
                           }}
                         >
-                          {/* Icon */}
                           <motion.div
                             className="text-4xl mb-4"
                             animate={isCurrentStep ? {
@@ -180,7 +187,6 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
                             {step.icon}
                           </motion.div>
 
-                          {/* Title */}
                           <h3 
                             className="text-xl font-bold mb-3"
                             style={{ color: cardTheme?.color || '#3b82f6' }}
@@ -188,7 +194,6 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
                             {step.title}
                           </h3>
 
-                          {/* Content */}
                           <motion.p 
                             className="text-gray-300 leading-relaxed"
                             initial={{ opacity: 0 }}
@@ -198,7 +203,6 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
                             {step.content}
                           </motion.p>
 
-                          {/* Progress indicator */}
                           {isCurrentStep && (
                             <motion.div
                               className="absolute bottom-2 right-2 w-3 h-3 rounded-full"
@@ -267,6 +271,73 @@ const AboutNew = ({ isActive, onClose, cardTheme, scrollControlled = false }) =>
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Additional scrollable content for demonstration */}
+            <div className="mt-8 space-y-6">
+              <motion.div
+                className="p-6 rounded-xl backdrop-blur-sm border"
+                style={{
+                  backgroundColor: `${cardTheme?.color || '#3b82f6'}10`,
+                  borderColor: cardTheme?.color || '#3b82f6'
+                }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.5, duration: 0.8 }}
+              >
+                <h4 
+                  className="text-lg font-bold mb-3"
+                  style={{ color: cardTheme?.color || '#3b82f6' }}
+                >
+                  🎓 Education & Achievements
+                </h4>
+                <div className="space-y-4 text-gray-300">
+                  <div>
+                    <h5 className="font-semibold text-white">B.Tech in CSE-AIML</h5>
+                    <p className="text-sm">VNR Vignana Jyothi Institute of Engineering & Technology</p>
+                    <p className="text-sm opacity-75">Current CGPA: 9.0 | 2022-2026</p>
+                  </div>
+                  <div>
+                    <h5 className="font-semibold text-white">Key Achievements</h5>
+                    <ul className="text-sm space-y-1 mt-2">
+                      <li>• Smart Interviews: Diamond Certified, Ranked 1247/37015</li>
+                      <li>• LeetCode Rating: 1605</li>
+                      <li>• CodeChef: 2 Stars</li>
+                      <li>• Round 2 Finalist in Krithoathon National Hackathon</li>
+                    </ul>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="p-6 rounded-xl backdrop-blur-sm border"
+                style={{
+                  backgroundColor: `${cardTheme?.color || '#3b82f6'}10`,
+                  borderColor: cardTheme?.color || '#3b82f6'
+                }}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.7, duration: 0.8 }}
+              >
+                <h4 
+                  className="text-lg font-bold mb-3"
+                  style={{ color: cardTheme?.color || '#3b82f6' }}
+                >
+                  💼 Professional Experience
+                </h4>
+                <div className="space-y-4 text-gray-300">
+                  <div>
+                    <h5 className="font-semibold text-white">AI/ML Engineer Intern - Infosys SpringBoard</h5>
+                    <p className="text-sm opacity-75">Sep 2024 - Present</p>
+                    <p className="text-sm mt-1">Contributing to AI-driven solutions and implementing machine learning models with hands-on experience in predictive analytics.</p>
+                  </div>
+                  <div>
+                    <h5 className="font-semibold text-white">Cloud ML Engineer - CSRBox</h5>
+                    <p className="text-sm opacity-75">Jun 2024 - Jul 2024</p>
+                    <p className="text-sm mt-1">Deployed cloud-based ML solutions on IBM Cloud and collaborated on scalable applications for social impact projects.</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
           </div>
         </motion.div>
       </motion.div>
