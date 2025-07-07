@@ -111,15 +111,45 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
     }, smooth ? 1000 : 100);
   };
 
+  // Navigate to next section
+  const goToNextSection = () => {
+    if (currentCheckpoint < checkpoints.length - 1) {
+      scrollToCheckpoint(currentCheckpoint + 1);
+    }
+  };
+
+  // Navigate to previous section
+  const goToPreviousSection = () => {
+    if (currentCheckpoint > 0) {
+      scrollToCheckpoint(currentCheckpoint - 1);
+    }
+  };
+
+  // Close modal and optionally navigate
+  const closeModalAndNavigate = (direction = null) => {
+    setActiveModal(null);
+    setShowHeroScene(true);
+    setTransitionPhase('none');
+    
+    // Navigate after closing modal
+    if (direction === 'next' && currentCheckpoint < checkpoints.length - 1) {
+      setTimeout(() => {
+        scrollToCheckpoint(currentCheckpoint + 1);
+      }, 500);
+    } else if (direction === 'prev' && currentCheckpoint > 0) {
+      setTimeout(() => {
+        scrollToCheckpoint(currentCheckpoint - 1);
+      }, 500);
+    }
+  };
+
   // Disable/Enable scroll listeners when modal is active
   useEffect(() => {
     if (activeModal) {
       setScrollListenersActive(false);
-      // Prevent body scroll when modal is open
       document.body.style.overflow = 'hidden';
     } else {
       setScrollListenersActive(true);
-      // Re-enable body scroll when modal is closed
       document.body.style.overflow = 'unset';
     }
 
@@ -133,7 +163,6 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
     let scrollTimeout;
     
     const handleScroll = (e) => {
-      // Don't handle scroll if modal is active or listeners are disabled
       if (isTransitioning || !scrollListenersActive || activeModal) {
         return;
       }
@@ -174,7 +203,6 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
 
     // Professional wheel handling
     const handleWheel = (e) => {
-      // Don't handle wheel if modal is active or listeners are disabled
       if (isTransitioning || !scrollListenersActive || activeModal) {
         return;
       }
@@ -195,7 +223,6 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
 
     // Professional keyboard navigation
     const handleKeyDown = (e) => {
-      // Don't handle keyboard if modal is active or listeners are disabled
       if (isTransitioning || !scrollListenersActive || activeModal) return;
       
       switch (e.key) {
@@ -221,9 +248,7 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
           scrollToCheckpoint(checkpoints.length - 1);
           break;
         case 'Escape':
-          // Allow escape to close modals
           if (activeModal) {
-            // This will be handled by the modal components
             return;
           }
           break;
@@ -275,7 +300,7 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
 
   // Professional card transition handler
   const handleCardTransition = (sectionId) => {
-    if (activeModal) return; // Don't handle if modal is already active
+    if (activeModal) return;
     
     const targetIndex = checkpoints.findIndex(cp => cp.id === sectionId);
     if (targetIndex > 0) {
@@ -453,49 +478,59 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
             )}
           </AnimatePresence>
 
-          {/* Professional Checkpoint Navigation - Hidden when modal is active */}
+          {/* Enhanced Professional Checkpoint Navigation - All dots clickable */}
           {!activeModal && (
             <div className="fixed right-8 top-1/2 transform -translate-y-1/2 z-40">
-              <div className="flex flex-col space-y-8">
+              <div className="flex flex-col space-y-6">
                 {checkpoints.map((checkpoint, index) => (
                   <motion.button
                     key={checkpoint.id}
-                    className="w-6 h-6 rounded-full border-2 transition-all relative group"
+                    className="w-8 h-8 rounded-full border-2 transition-all relative group cursor-pointer"
                     style={{
                       backgroundColor: index === currentCheckpoint 
                         ? checkpoint.color || '#3b82f6'
                         : 'transparent',
                       borderColor: checkpoint.color || '#3b82f6',
                       boxShadow: index === currentCheckpoint 
-                        ? `0 0 20px ${checkpoint.color || '#3b82f6'}60`
-                        : 'none'
+                        ? `0 0 25px ${checkpoint.color || '#3b82f6'}70`
+                        : `0 0 10px ${checkpoint.color || '#3b82f6'}30`
                     }}
                     onClick={() => scrollToCheckpoint(index)}
                     disabled={isTransitioning}
-                    whileHover={{ scale: 1.5 }}
+                    whileHover={{ 
+                      scale: 1.6,
+                      boxShadow: `0 0 30px ${checkpoint.color || '#3b82f6'}80`
+                    }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <div className="absolute right-10 top-1/2 transform -translate-y-1/2 bg-black/95 text-white px-4 py-3 rounded-xl text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-lg border border-gray-700/50">
-                      <div className="flex items-center space-x-3">
-                        {checkpoint.icon && <span className="text-lg">{checkpoint.icon}</span>}
-                        <div>
-                          <div className="font-semibold">{checkpoint.title || checkpoint.id}</div>
+                    {/* Enhanced Tooltip */}
+                    <div className="absolute right-12 top-1/2 transform -translate-y-1/2 bg-black/95 text-white px-5 py-4 rounded-xl text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-lg border border-gray-700/50 min-w-[200px]">
+                      <div className="flex items-center space-x-4">
+                        {checkpoint.icon && <span className="text-2xl">{checkpoint.icon}</span>}
+                        <div className="text-left">
+                          <div className="font-bold text-lg" style={{ color: checkpoint.color || '#3b82f6' }}>
+                            {checkpoint.title || checkpoint.id}
+                          </div>
                           {checkpoint.subtitle && (
-                            <div className="text-xs opacity-75">{checkpoint.subtitle}</div>
+                            <div className="text-sm opacity-75 mt-1">{checkpoint.subtitle}</div>
+                          )}
+                          {checkpoint.description && (
+                            <div className="text-xs opacity-60 mt-2">{checkpoint.description}</div>
                           )}
                         </div>
                       </div>
-                      <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-6 border-transparent border-l-black/95"></div>
+                      <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-8 border-transparent border-l-black/95"></div>
                     </div>
                     
+                    {/* Enhanced Active indicators */}
                     {index === currentCheckpoint && (
                       <>
                         <motion.div
                           className="absolute inset-0 rounded-full border-2"
                           style={{ borderColor: checkpoint.color || '#3b82f6' }}
                           animate={{
-                            scale: [1, 2.8, 1],
-                            opacity: [0.9, 0.3, 0.9]
+                            scale: [1, 3.2, 1],
+                            opacity: [0.9, 0.2, 0.9]
                           }}
                           transition={{
                             duration: 3,
@@ -507,8 +542,8 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
                           className="absolute inset-0 rounded-full"
                           style={{ backgroundColor: checkpoint.color || '#3b82f6' }}
                           animate={{
-                            scale: [0.7, 1.2, 0.7],
-                            opacity: [0.7, 1, 0.7]
+                            scale: [0.6, 1.3, 0.6],
+                            opacity: [0.8, 1, 0.8]
                           }}
                           transition={{
                             duration: 2,
@@ -518,16 +553,26 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
                         />
                       </>
                     )}
+
+                    {/* Clickable indicator */}
+                    <motion.div
+                      className="absolute inset-0 rounded-full border border-white/20"
+                      whileHover={{
+                        borderColor: 'white',
+                        scale: 1.2
+                      }}
+                      transition={{ duration: 0.2 }}
+                    />
                   </motion.button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Professional Progress Bar - Hidden when modal is active */}
+          {/* Enhanced Professional Progress Bar */}
           {!activeModal && (
             <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40">
-              <div className="w-96 h-4 bg-gray-800/70 rounded-full overflow-hidden backdrop-blur-lg border border-gray-700/60">
+              <div className="w-96 h-5 bg-gray-800/70 rounded-full overflow-hidden backdrop-blur-lg border border-gray-700/60">
                 <motion.div
                   className="h-full rounded-full relative"
                   style={{
@@ -555,35 +600,35 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
                 </motion.div>
               </div>
               <div className="text-center mt-4 text-sm text-gray-400 font-medium">
-                <span style={{ color: currentCheckpointData?.color || '#3b82f6' }} className="text-lg font-bold">
+                <span style={{ color: currentCheckpointData?.color || '#3b82f6' }} className="text-xl font-bold">
                   {currentCheckpoint + 1}
                 </span>
                 <span className="mx-3 text-gray-500">/</span>
                 <span className="text-gray-300">{checkpoints.length}</span>
-                <div className="text-sm mt-2 font-semibold" style={{ color: currentCheckpointData?.color || '#3b82f6' }}>
+                <div className="text-base mt-2 font-bold" style={{ color: currentCheckpointData?.color || '#3b82f6' }}>
                   {currentCheckpointData?.title || 'Home'}
                 </div>
               </div>
             </div>
           )}
 
-          {/* Professional Scroll Hint - Hidden when modal is active */}
+          {/* Professional Scroll Hint */}
           {currentCheckpoint === 0 && !isTransitioning && !activeModal && (
             <motion.div
-              className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-30"
+              className="fixed bottom-32 left-1/2 transform -translate-x-1/2 z-30"
               animate={{ y: [0, 15, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
               <div className="text-center text-gray-400">
-                <div className="w-10 h-14 border-2 border-gray-400 rounded-full mx-auto mb-4 relative">
+                <div className="w-12 h-16 border-2 border-gray-400 rounded-full mx-auto mb-4 relative">
                   <motion.div
-                    className="w-3 h-5 bg-gray-400 rounded-full mx-auto mt-3"
-                    animate={{ y: [0, 20, 0] }}
+                    className="w-4 h-6 bg-gray-400 rounded-full mx-auto mt-3"
+                    animate={{ y: [0, 24, 0] }}
                     transition={{ duration: 2.5, repeat: Infinity }}
                   />
                 </div>
-                <p className="text-base font-medium">Scroll to explore</p>
-                <p className="text-sm opacity-75 mt-2">Use mouse wheel, arrow keys, or navigation dots</p>
+                <p className="text-lg font-medium">Explore My Portfolio</p>
+                <p className="text-sm opacity-75 mt-2">Click dots • Scroll • Use arrow keys</p>
               </div>
             </motion.div>
           )}
@@ -593,7 +638,7 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
             <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-40">
               <div className="flex items-center space-x-4 bg-black/90 px-6 py-3 rounded-full backdrop-blur-lg border border-gray-700/50">
                 <motion.div
-                  className="w-5 h-5 rounded-full"
+                  className="w-6 h-6 rounded-full"
                   style={{ backgroundColor: currentCheckpointData?.color || '#3b82f6' }}
                   animate={{ scale: [1, 1.3, 1] }}
                   transition={{ duration: 0.8, repeat: Infinity }}
@@ -604,24 +649,148 @@ const ScrollBasedSectionTransition = ({ className = "" }) => {
           )}
         </div>
 
-        {/* Professional Section Modals with proper scroll handling */}
+        {/* Professional Section Modals with Navigation Arrows */}
         {checkpoints.slice(1).map((checkpoint) => {
           const SectionComponent = checkpoint.component;
+          const isCurrentModal = activeModal === checkpoint.modal;
+          const currentIndex = checkpoints.findIndex(cp => cp.modal === checkpoint.modal);
+          
           return (
             <div 
               key={checkpoint.id} 
               className="fixed inset-0 z-50"
               style={{ 
-                pointerEvents: activeModal === checkpoint.modal ? 'auto' : 'none',
-                zIndex: activeModal === checkpoint.modal ? 9999 : -1
+                pointerEvents: isCurrentModal ? 'auto' : 'none',
+                zIndex: isCurrentModal ? 9999 : -1
               }}
             >
               <SectionComponent
-                isActive={activeModal === checkpoint.modal}
-                onClose={() => {}}
+                isActive={isCurrentModal}
+                onClose={() => closeModalAndNavigate()}
                 cardTheme={checkpoint}
                 scrollControlled={true}
               />
+              
+              {/* Navigation Arrows for Modal */}
+              {isCurrentModal && (
+                <>
+                  {/* Previous Section Arrow */}
+                  {currentIndex > 1 && (
+                    <motion.button
+                      className="fixed left-8 top-1/2 transform -translate-y-1/2 z-[10000] w-16 h-16 rounded-full backdrop-blur-lg border-2 flex items-center justify-center group"
+                      style={{
+                        backgroundColor: `${checkpoint.color}20`,
+                        borderColor: checkpoint.color
+                      }}
+                      onClick={() => closeModalAndNavigate('prev')}
+                      whileHover={{ 
+                        scale: 1.1,
+                        backgroundColor: `${checkpoint.color}30`
+                      }}
+                      whileTap={{ scale: 0.9 }}
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 1 }}
+                    >
+                      <svg 
+                        className="w-8 h-8 transform group-hover:-translate-x-1 transition-transform"
+                        style={{ color: checkpoint.color }}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                      
+                      {/* Tooltip */}
+                      <div className="absolute left-20 top-1/2 transform -translate-y-1/2 bg-black/95 text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-lg border border-gray-700/50">
+                        Previous: {checkpoints[currentIndex - 1]?.title}
+                        <div className="absolute right-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-r-black/95"></div>
+                      </div>
+                    </motion.button>
+                  )}
+
+                  {/* Next Section Arrow */}
+                  {currentIndex < checkpoints.length - 1 && (
+                    <motion.button
+                      className="fixed right-8 top-1/2 transform -translate-y-1/2 z-[10000] w-16 h-16 rounded-full backdrop-blur-lg border-2 flex items-center justify-center group"
+                      style={{
+                        backgroundColor: `${checkpoint.color}20`,
+                        borderColor: checkpoint.color
+                      }}
+                      onClick={() => closeModalAndNavigate('next')}
+                      whileHover={{ 
+                        scale: 1.1,
+                        backgroundColor: `${checkpoint.color}30`
+                      }}
+                      whileTap={{ scale: 0.9 }}
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 1 }}
+                    >
+                      <svg 
+                        className="w-8 h-8 transform group-hover:translate-x-1 transition-transform"
+                        style={{ color: checkpoint.color }}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                      
+                      {/* Tooltip */}
+                      <div className="absolute right-20 top-1/2 transform -translate-y-1/2 bg-black/95 text-white px-4 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-lg border border-gray-700/50">
+                        Next: {checkpoints[currentIndex + 1]?.title}
+                        <div className="absolute left-full top-1/2 transform -translate-y-1/2 border-4 border-transparent border-l-black/95"></div>
+                      </div>
+                    </motion.button>
+                  )}
+
+                  {/* Close and Navigate Options */}
+                  <motion.div
+                    className="fixed bottom-8 right-8 z-[10000] flex items-center space-x-4"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.2 }}
+                  >
+                    {/* Back to Home */}
+                    <motion.button
+                      className="px-6 py-3 rounded-full backdrop-blur-lg border-2 flex items-center space-x-2 group"
+                      style={{
+                        backgroundColor: `${checkpoint.color}15`,
+                        borderColor: checkpoint.color
+                      }}
+                      onClick={() => {
+                        setActiveModal(null);
+                        setShowHeroScene(true);
+                        setTransitionPhase('none');
+                        setTimeout(() => scrollToCheckpoint(0), 500);
+                      }}
+                      whileHover={{ 
+                        scale: 1.05,
+                        backgroundColor: `${checkpoint.color}25`
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <svg 
+                        className="w-5 h-5"
+                        style={{ color: checkpoint.color }}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                      </svg>
+                      <span 
+                        className="text-sm font-medium"
+                        style={{ color: checkpoint.color }}
+                      >
+                        Home
+                      </span>
+                    </motion.button>
+                  </motion.div>
+                </>
+              )}
             </div>
           );
         })}

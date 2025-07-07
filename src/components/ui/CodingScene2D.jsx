@@ -120,7 +120,7 @@ const CodingScene2D = ({
     return () => window.removeEventListener('openAboutModal', handleOpenAboutModal);
   }, []);
 
-  // Handle card click navigation
+  // Handle card click navigation - Enhanced for better clickability
   const handleCardClick = (sectionId) => {
     if (activeSectionModal === sectionId) return;
     
@@ -353,7 +353,7 @@ const CodingScene2D = ({
             ))}
           </g>
           
-          {/* Professional floating cards with exact positions */}
+          {/* Enhanced Professional floating cards with exact positions and better clickability */}
           <AnimatePresence>
             {showGreetingState && (
               <motion.g
@@ -377,11 +377,21 @@ const CodingScene2D = ({
                       delay: index * 0.15
                     }}
                     style={{ cursor: 'pointer', pointerEvents: 'all' }}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      handleCardClick(card.id);
-                    }}
                   >
+                    {/* Enhanced clickable area - larger invisible area for better UX */}
+                    <rect 
+                      x={card.position.x - 10} 
+                      y={card.position.y - 10} 
+                      width={card.position.width + 20} 
+                      height={card.position.height + 20} 
+                      fill="transparent" 
+                      style={{ cursor: 'pointer' }}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleCardClick(card.id);
+                      }}
+                    />
+
                     {/* Professional card transition effects */}
                     <AnimatePresence>
                       {(cardTransition === card.id || highlightCard === card.id) && (
@@ -457,7 +467,7 @@ const CodingScene2D = ({
                       )}
                     </AnimatePresence>
 
-                    {/* Professional card design */}
+                    {/* Enhanced Professional card design with better hover states */}
                     <motion.rect 
                       x={card.position.x} 
                       y={card.position.y} 
@@ -478,6 +488,7 @@ const CodingScene2D = ({
                           'drop-shadow(0 6px 12px rgba(0,0,0,0.25))'
                       }}
                       transition={{ duration: 0.6, ease: "easeInOut" }}
+                      style={{ cursor: 'pointer' }}
                     />
                     
                     {/* Professional card icon */}
@@ -485,6 +496,7 @@ const CodingScene2D = ({
                       x={card.position.x + 12} 
                       y={card.position.y + 20} 
                       fontSize="16"
+                      style={{ pointerEvents: 'none' }}
                     >
                       {card.icon}
                     </text>
@@ -497,6 +509,7 @@ const CodingScene2D = ({
                       fontSize="11" 
                       fontWeight="600"
                       fontFamily="system-ui"
+                      style={{ pointerEvents: 'none' }}
                     >
                       {card.title}
                     </text>
@@ -508,6 +521,7 @@ const CodingScene2D = ({
                       fill={card.color.replace(')', ', 0.85)').replace('rgb', 'rgba')} 
                       fontSize="8"
                       fontFamily="system-ui"
+                      style={{ pointerEvents: 'none' }}
                     >
                       {card.subtitle}
                     </text>
@@ -544,20 +558,27 @@ const CodingScene2D = ({
                       </>
                     )}
 
-                    {/* Professional hover effect */}
+                    {/* Enhanced Professional hover effect with better feedback */}
                     <motion.rect 
-                      x={card.position.x} 
-                      y={card.position.y} 
-                      width={card.position.width} 
-                      height={card.position.height} 
+                      x={card.position.x - 2} 
+                      y={card.position.y - 2} 
+                      width={card.position.width + 4} 
+                      height={card.position.height + 4} 
                       fill="transparent" 
-                      rx="8"
+                      stroke="transparent"
+                      strokeWidth="2"
+                      rx="10"
+                      style={{ cursor: 'pointer' }}
                       whileHover={{ 
                         stroke: card.color,
-                        strokeWidth: 2.5,
-                        filter: "drop-shadow(0 0 15px " + card.color + ")"
+                        strokeWidth: 3,
+                        filter: "drop-shadow(0 0 20px " + card.color + "50)"
                       }}
-                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleCardClick(card.id);
+                      }}
                     />
                   </motion.g>
                 ))}
